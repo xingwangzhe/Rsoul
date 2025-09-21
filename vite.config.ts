@@ -11,7 +11,7 @@ const host = process.env.TAURI_DEV_HOST;
 export default defineConfig(async () => ({
   plugins: [
     vue(),
-    Components({ resolvers: [NaiveUiResolver()] }),
+    Components(),
     AutoImport({ resolvers: [NaiveUiResolver()] }),
   ],
 
