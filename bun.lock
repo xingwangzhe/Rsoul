@@ -9,6 +9,7 @@
         "@tauri-apps/plugin-fs": "~2.4.2",
         "@tauri-apps/plugin-opener": "^2.5.0",
         "@tauri-apps/plugin-store": "~2",
+        "@vicons/ionicons5": "^0.13.0",
         "md-editor-v3": "^6.0.1",
         "vue": "^3.5.21",
         "vue-router": "^4.5.1",
@@ -293,6 +294,8 @@
     "@vavt/copy2clipboard": ["@vavt/copy2clipboard@1.0.3", "https://registry.npmmirror.com/@vavt/copy2clipboard/-/copy2clipboard-1.0.3.tgz", {}, "sha512-HtG48r2FBYp9eRvGB3QGmtRBH1zzRRAVvFbGgFstOwz4/DDaNiX0uZc3YVKPydqgOav26pibr9MtoCaWxn7aeA=="],
 
     "@vavt/util": ["@vavt/util@2.1.0", "https://registry.npmmirror.com/@vavt/util/-/util-2.1.0.tgz", {}, "sha512-YIfAvArSFVXmWvoF+DEGD0FhkhVNcCtVWWkfYtj76eSrwHh/wuEEFhiEubg1XLNM3tChO8FH8xJCT/hnizjgFQ=="],
+
+    "@vicons/ionicons5": ["@vicons/ionicons5@0.13.0", "https://registry.npmmirror.com/@vicons/ionicons5/-/ionicons5-0.13.0.tgz", {}, "sha512-zvZKBPjEXKN7AXNo2Na2uy+nvuv6SP4KAMQxpKL2vfHMj0fSvuw7JZcOPCjQC3e7ayssKnaoFVAhbYcW6v41qQ=="],
 
     "@vitejs/plugin-vue": ["@vitejs/plugin-vue@5.2.4", "https://registry.npmmirror.com/@vitejs/plugin-vue/-/plugin-vue-5.2.4.tgz", { "peerDependencies": { "vite": "^5.0.0 || ^6.0.0", "vue": "^3.2.25" } }, "sha512-7Yx/SXSOcQq5HiiV3orevHUFn+pmMB4cgbEkDYgnkUWb0WfeQ/wa2yFv6D5ICiCQOVpjA7vYDXrC7AGO8yjDHA=="],
 

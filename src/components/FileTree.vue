@@ -15,7 +15,16 @@
                 <n-spin /> 正在加载文件树...
             </div>
 
-            <n-tree v-else-if="treeData.length" :data="treeData" />
+            <n-tree
+                block-line
+                expand-on-click
+                virtual-scroll
+                v-else-if="treeData.length"
+                :data="treeData"
+                :node-props="nodeProps"
+                :on-update:expanded-keys="updatePrefixWithExpaned"
+                style="height: 100vh"
+            />
 
             <div v-else class="empty">尚未选择文件夹或文件夹为空。</div>
         </div>
@@ -23,52 +32,30 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { NButton, NTree, NSpin } from "naive-ui";
+import { ref, onMounted, h } from "vue";
+import { NButton, NTree, NSpin, NIcon } from "naive-ui";
 import { invoke } from "@tauri-apps/api/core";
+import type { TreeOption } from "naive-ui";
+import {
+    FileTrayFullOutline,
+    Folder,
+    FolderOpenOutline,
+} from "@vicons/ionicons5";
 
-/**
- * 后端 TreeNode 类型（与 Rust 后端保持一致）
- */
-interface BackendNode {
-    name: string;
-    path: string;
-    is_dir: boolean;
-    children?: BackendNode[] | null;
-    size?: number | null;
-}
+import {
+    mapNode,
+    formatSize,
+    updatePrefixWithExpaned,
+    BackendNode,
+    NaiveNode,
+} from "../utils/fileTreeUtils";
 
-/**
- * Naive UI n-tree 需要的节点格式
- */
-interface NaiveNode {
-    label: string;
-    key: string;
-    children?: NaiveNode[];
-}
+const emit = defineEmits(["fileSelected"]);
 
 const treeData = ref<NaiveNode[]>([]);
 const loading = ref(false);
 const error = ref<string | null>(null);
 const selectedPath = ref<string | null>(null);
-
-/**
- * 将后端节点映射为 Naive UI 节点
- */
-function mapNode(b: BackendNode): NaiveNode {
-    let label = b.name;
-    if (!b.is_dir && b.size != null) {
-        label += ` (${formatSize(b.size)})`;
-    }
-    const node: NaiveNode = {
-        label,
-        key: b.path,
-    };
-    if (b.is_dir && b.children && Array.isArray(b.children)) {
-        node.children = b.children.map(mapNode);
-    }
-    return node;
-}
 
 /**
  * 从指定路径加载文件树（调用 Rust: get_file_tree_from_path）
@@ -148,11 +135,28 @@ onMounted(async () => {
     }
 });
 
-function formatSize(n: number) {
-    if (n < 1024) return `${n} B`;
-    if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
-    if (n < 1024 * 1024 * 1024) return `${(n / (1024 * 1024)).toFixed(1)} MB`;
-    return `${(n / (1024 * 1024 * 1024)).toFixed(1)} GB`;
+function nodeProps({ option }: { option: TreeOption }) {
+    return {
+        onClick() {
+            handleNodeClick(option as NaiveNode);
+        },
+    };
+}
+
+async function handleNodeClick(node: NaiveNode) {
+    console.log("handleNodeClick called", node); // 新增：调试日志
+    if (!node.isDir) {
+        try {
+            const content = await invoke<string>("get_file_content", {
+                filePath: node.key,
+            });
+            emit("fileSelected", content);
+            console.log("内容为：" + content);
+        } catch (e) {
+            console.error("读取文件失败:", e);
+            error.value = "读取文件失败: " + String(e);
+        }
+    }
 }
 </script>
 

@@ -1,4 +1,5 @@
 mod commands;
+use commands::get_file_content::get_file_content;
 use commands::get_file_tree::{get_file_tree, get_file_tree_from_path, get_stored_path};
 use tauri::menu::MenuBuilder;
 use tauri::Emitter;
@@ -12,7 +13,8 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             get_file_tree,
             get_file_tree_from_path,
-            get_stored_path
+            get_stored_path,
+            get_file_content
         ])
         .setup(|app| {
             let menu = MenuBuilder::new(app)

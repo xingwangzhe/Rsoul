@@ -1,15 +1,24 @@
 <template>
     <div id="main-container">
         <div id="left-dir">
-            <FileTree />
+            <FileTree @file-selected="handleFileSelected" />
         </div>
-        <Editor />
+        <div id="right-editor">
+            <Editor :content="selectedContent" />
+        </div>
     </div>
 </template>
 
 <script setup>
+import { ref } from "vue";
 import FileTree from "../components/FileTree.vue";
 import Editor from "../components/Editor.vue";
+
+const selectedContent = ref("");
+
+function handleFileSelected(content) {
+    selectedContent.value = content;
+}
 </script>
 
 <style scoped>
@@ -19,7 +28,7 @@ import Editor from "../components/Editor.vue";
     & #left-dir {
         width: 300px;
         height: 100vh;
-        border: solid crimson;
+
         flex: none;
         display: flex;
         flex-direction: column;
@@ -28,7 +37,6 @@ import Editor from "../components/Editor.vue";
     & #right-editor {
         width: 100vh;
         height: 100vh;
-        border: solid crimson;
         flex: 8;
     }
 }
