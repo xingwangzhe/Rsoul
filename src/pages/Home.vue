@@ -3,12 +3,13 @@
         <div id="left-dir">
             <FileTree />
         </div>
-        <div id="right-editor"></div>
+        <Editor />
     </div>
 </template>
 
 <script setup>
 import FileTree from "../components/FileTree.vue";
+import Editor from "../components/Editor.vue";
 </script>
 
 <style scoped>
