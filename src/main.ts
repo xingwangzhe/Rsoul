@@ -7,9 +7,9 @@ import About from "./pages/About.vue";
 import Settings from "./pages/Settings.vue";
 
 const routes = [
-  { path: "/", component: Home },
-  { path: "/about", component: About },
-  { path: "/settings", component: Settings },
+  { path: "/", name: "Home", component: Home },
+  { path: "/about", name: "About", component: About },
+  { path: "/settings", name: "Settings", component: Settings },
 ];
 
 const router = createRouter({

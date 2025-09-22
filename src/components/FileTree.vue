@@ -151,7 +151,7 @@ async function handleNodeClick(node: NaiveNode) {
                 filePath: node.key,
             });
             emit("fileSelected", content);
-            console.log("内容为：" + content);
+            // console.log("内容为：" + content);
         } catch (e) {
             console.error("读取文件失败:", e);
             error.value = "读取文件失败: " + String(e);

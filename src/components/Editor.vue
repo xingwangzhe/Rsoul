@@ -15,7 +15,7 @@ watch(
     (newContent) => {
         if (newContent !== undefined) {
             text.value = newContent;
-            console.log(newContent);
+            // console.log(newContent);
         }
     },
 );
