@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { NButton, NTree, NSpin } from "naive-ui";
 import { invoke } from "@tauri-apps/api/core";
 
@@ -71,6 +71,38 @@ function mapNode(b: BackendNode): NaiveNode {
 }
 
 /**
+ * 从指定路径加载文件树（调用 Rust: get_file_tree_from_path）
+ */
+async function loadFileTree(path: string) {
+    loading.value = true;
+    error.value = null;
+    treeData.value = [];
+    selectedPath.value = path;
+
+    try {
+        const res = await invoke<BackendNode>("get_file_tree_from_path", {
+            path,
+        });
+
+        if (!res) {
+            error.value = "后端返回空结果";
+            return;
+        }
+
+        treeData.value = [mapNode(res as BackendNode)];
+    } catch (e) {
+        console.error("invoke error", e);
+        if (e instanceof Error) {
+            error.value = e.message;
+        } else {
+            error.value = String(e);
+        }
+    } finally {
+        loading.value = false;
+    }
+}
+
+/**
  * 从后端拉取文件树（调用 Rust: get_file_tree）
  */
 async function getFileTree() {
@@ -103,6 +135,18 @@ async function getFileTree() {
         loading.value = false;
     }
 }
+
+// 在组件挂载时自动加载存储的路径
+onMounted(async () => {
+    try {
+        const path = await invoke<Option<string>>("get_stored_path");
+        if (path) {
+            await loadFileTree(path);
+        }
+    } catch (e) {
+        console.error("Failed to load stored path:", e);
+    }
+});
 
 function formatSize(n: number) {
     if (n < 1024) return `${n} B`;

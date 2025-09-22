@@ -1,14 +1,19 @@
 mod commands;
-use commands::get_file_tree::get_file_tree;
+use commands::get_file_tree::{get_file_tree, get_file_tree_from_path, get_stored_path};
 use tauri::menu::MenuBuilder;
 use tauri::Emitter;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![get_file_tree])
+        .invoke_handler(tauri::generate_handler![
+            get_file_tree,
+            get_file_tree_from_path,
+            get_stored_path
+        ])
         .setup(|app| {
             let menu = MenuBuilder::new(app)
                 .text("nav-home", "Editor")

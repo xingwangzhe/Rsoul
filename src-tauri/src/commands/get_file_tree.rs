@@ -4,6 +4,7 @@ use std::io;
 use std::path::{Path, PathBuf};
 use tauri::AppHandle;
 use tauri_plugin_dialog::DialogExt;
+use tauri_plugin_store::StoreExt;
 
 /// 表示发送给前端的文件或目录结构化节点（例如 n-tree）
 #[derive(Debug, Serialize)]
@@ -97,7 +98,7 @@ fn build_tree(path: &Path, depth: usize, node_count: &mut usize) -> Result<TreeN
     }
 }
 
-/// Tauri 命令：打开文件夹选择器并返回表示所选文件夹的结构化 TreeNode。
+/// Tauri 命令：弹出文件夹选择器，选择文件夹并保存路径，然后构建文件树。
 /// 重/阻塞工作（对话框 + 文件系统遍历）在阻塞线程中执行，以避免阻塞主线程。
 #[tauri::command]
 pub async fn get_file_tree(app: AppHandle) -> Result<TreeNode, String> {
@@ -116,6 +117,12 @@ pub async fn get_file_tree(app: AppHandle) -> Result<TreeNode, String> {
         // 转换为 PathBuf
         let root_path = PathBuf::from(selected.to_string());
 
+        // 保存到存储
+        let store = app_handle
+            .store(".settings.dat")
+            .map_err(|e| io::Error::new(io::ErrorKind::Other, format!("无法访问存储: {}", e)))?;
+        store.set("selectedPath", root_path.to_string_lossy().to_string());
+
         // 使用限制构建树以避免内存/时间爆炸
         let mut node_count: usize = 0;
         match build_tree(&root_path, 0usize, &mut node_count) {
@@ -130,4 +137,39 @@ pub async fn get_file_tree(app: AppHandle) -> Result<TreeNode, String> {
         Ok(tree_node) => Ok(tree_node),
         Err(io_err) => Err(format!("无法读取目录: {}", io_err)),
     }
+}
+
+/// Tauri 命令：从指定路径构建文件树，而不弹出选择器。
+#[tauri::command]
+pub async fn get_file_tree_from_path(path: String) -> Result<TreeNode, String> {
+    // 在阻塞线程中运行文件系统遍历，以避免阻塞主线程。
+    let res = tauri::async_runtime::spawn_blocking(move || {
+        let root_path = PathBuf::from(path);
+
+        // 使用限制构建树以避免内存/时间爆炸
+        let mut node_count: usize = 0;
+        match build_tree(&root_path, 0usize, &mut node_count) {
+            Ok(tree) => Ok(tree),
+            Err(e) => Err(e),
+        }
+    })
+    .await
+    .map_err(|e| format!("后台线程执行失败: {}", e))?;
+
+    match res {
+        Ok(tree_node) => Ok(tree_node),
+        Err(io_err) => Err(format!("无法读取目录: {}", io_err)),
+    }
+}
+
+/// Tauri 命令：获取存储的文件夹路径。
+#[tauri::command]
+pub fn get_stored_path(app: AppHandle) -> Result<Option<String>, String> {
+    let store = app
+        .store(".settings.dat")
+        .map_err(|e| format!("无法访问存储: {}", e))?;
+    let path = store
+        .get("selectedPath")
+        .and_then(|v| v.as_str().map(|s| s.to_string()));
+    Ok(path)
 }
