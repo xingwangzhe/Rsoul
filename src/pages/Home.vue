@@ -1,16 +1,19 @@
 <template>
-    <div id="main-container">
-        <div id="left-dir">
-            <FileTree @file-selected="handleFileSelected" />
+    <n-message-provider>
+        <div id="main-container">
+            <div id="left-dir">
+                <FileTree @file-selected="handleFileSelected" />
+            </div>
+            <div id="right-editor">
+                <Editor :content="selectedContent" />
+            </div>
         </div>
-        <div id="right-editor">
-            <Editor :content="selectedContent" />
-        </div>
-    </div>
+    </n-message-provider>
 </template>
 
 <script setup>
 import { ref } from "vue";
+import { NMessageProvider } from "naive-ui";
 import FileTree from "../components/FileTree.vue";
 import Editor from "../components/Editor.vue";
 
