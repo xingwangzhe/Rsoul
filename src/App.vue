@@ -9,7 +9,8 @@
 </template>
 
 <script lang="ts" setup>
-console.log("你好");
+import i18next from "i18next";
+console.log(i18next.t("app.greeting"));
 </script>
 
 <style></style>

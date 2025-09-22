@@ -1,0 +1,45 @@
+{
+  "app": {
+    "greeting": "你好",
+    "title": "Rsoul"
+  },
+  "nav": {
+    "home": "主頁",
+    "about": "關於",
+    "settings": "設定"
+  },
+  "fileTree": {
+    "addFolder": "添加資料夾 📂",
+    "selected": "已選擇: {{path}}",
+    "error": "錯誤：{{err}}",
+    "loading": "正在加載檔案樹...",
+    "empty": "尚未選擇資料夾或資料夾為空。",
+    "backendEmpty": "後端返回空結果",
+    "readFileFailed": "讀取檔案失敗：{{err}}",
+    "chooseFolder": "選擇資料夾",
+    "refresh": "重新整理"
+  },
+  "editor": {
+    "noPath": "未指定儲存路徑",
+    "saveSuccess": "儲存成功",
+    "saveFailed": "儲存失敗：{{err}}",
+    "confirmSave": "是否儲存更改？",
+    "saving": "儲存中..."
+  },
+  "messages": {
+    "ok": "確定",
+    "cancel": "取消",
+    "yes": "是",
+    "no": "否"
+  },
+  "settings": {
+    "language": "語言",
+    "theme": "主題",
+    "autoSave": "自動儲存",
+    "saveInterval": "儲存間隔（秒）"
+  },
+  "errors": {
+    "unknown": "發生未知錯誤",
+    "permissionDenied": "權限被拒絕"
+  }
+}

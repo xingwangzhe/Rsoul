@@ -2,17 +2,19 @@
     <div class="file-tree-container">
         <div class="controls">
             <n-button @click="getFileTree" :loading="loading">
-                添加文件夹📂
+                {{ $t("fileTree.addFolder") }}
             </n-button>
             <div v-if="selectedPath" class="selected">
-                已选择: <strong>{{ selectedPath }}</strong>
+                {{ $t("fileTree.selected", { path: selectedPath }) }}
             </div>
-            <div v-if="error" class="error">错误：{{ error }}</div>
+            <div v-if="error" class="error">
+                {{ $t("fileTree.error", { err: error }) }}
+            </div>
         </div>
 
         <div class="tree-area">
             <div v-if="loading" class="loading">
-                <n-spin /> 正在加载文件树...
+                <n-spin /> {{ $t("fileTree.loading") }}
             </div>
 
             <n-tree
@@ -26,7 +28,7 @@
                 style="height: 100vh"
             />
 
-            <div v-else class="empty">尚未选择文件夹或文件夹为空。</div>
+            <div v-else class="empty">{{ $t("fileTree.empty") }}</div>
         </div>
     </div>
 </template>
@@ -41,6 +43,8 @@ import {
     Folder,
     FolderOpenOutline,
 } from "@vicons/ionicons5";
+
+import i18next from "i18next";
 
 import {
     mapNode,
@@ -72,7 +76,7 @@ async function loadFileTree(path: string) {
         });
 
         if (!res) {
-            error.value = "后端返回空结果";
+            error.value = i18next.t("fileTree.backendEmpty") as string;
             return;
         }
 
@@ -103,7 +107,7 @@ async function getFileTree() {
         const res = await invoke<BackendNode>("get_file_tree");
 
         if (!res) {
-            error.value = "后端返回空结果";
+            error.value = i18next.t("fileTree.backendEmpty") as string;
             return;
         }
 
@@ -150,11 +154,17 @@ async function handleNodeClick(node: NaiveNode) {
             const content = await invoke<string>("get_file_content", {
                 filePath: node.key,
             });
-            emit("fileSelected", content);
-            // console.log("内容为：" + content);
+            // Emit both the file content and the file path so parent can know where to save
+            emit("fileSelected", { content, path: node.key });
+            console.log("content:", content, " path:", node.key);
         } catch (e) {
-            console.error("读取文件失败:", e);
-            error.value = "读取文件失败: " + String(e);
+            console.error(
+                i18next.t("fileTree.readFileFailed", { err: String(e) }),
+                e,
+            );
+            error.value = i18next.t("fileTree.readFileFailed", {
+                err: String(e),
+            }) as string;
         }
     }
 }

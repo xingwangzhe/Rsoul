@@ -13,5 +13,6 @@ declare module 'vue' {
     NConfigProvider: typeof import('naive-ui')['NConfigProvider']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SwitchDark: typeof import('./src/components/SwitchDark.vue')['default']
   }
 }

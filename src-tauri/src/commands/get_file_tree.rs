@@ -107,7 +107,7 @@ pub async fn get_file_tree(app: AppHandle) -> Result<TreeNode, String> {
 
     // 在阻塞线程中运行阻塞对话框 + 遍历，以不阻塞运行时/主线程。
     let res = tauri::async_runtime::spawn_blocking(move || {
-        // 显示阻塞文件夹选择器。这返回 Option<FilePath>
+        // 显示阻塞文件夹选择器。这返回 Option<file_path>
         let selected = app_handle
             .dialog()
             .file()

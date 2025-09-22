@@ -1,0 +1,45 @@
+{
+  "app": {
+    "greeting": "Hello",
+    "title": "Rsoul"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "settings": "Settings"
+  },
+  "fileTree": {
+    "addFolder": "Add Folder 📂",
+    "selected": "Selected: {{path}}",
+    "error": "Error: {{err}}",
+    "loading": "Loading file tree...",
+    "empty": "No folder selected or the folder is empty.",
+    "backendEmpty": "Backend returned empty result",
+    "readFileFailed": "Failed to read file: {{err}}",
+    "chooseFolder": "Choose a folder",
+    "refresh": "Refresh"
+  },
+  "editor": {
+    "noPath": "No file path provided to save markdown",
+    "saveSuccess": "Save successful",
+    "saveFailed": "Save failed: {{err}}",
+    "confirmSave": "Do you want to save changes?",
+    "saving": "Saving..."
+  },
+  "messages": {
+    "ok": "OK",
+    "cancel": "Cancel",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "settings": {
+    "language": "Language",
+    "theme": "Theme",
+    "autoSave": "Auto save",
+    "saveInterval": "Save interval (s)"
+  },
+  "errors": {
+    "unknown": "An unknown error occurred",
+    "permissionDenied": "Permission denied"
+  }
+}

@@ -5,7 +5,7 @@
                 <FileTree @file-selected="handleFileSelected" />
             </div>
             <div id="right-editor">
-                <Editor :content="selectedContent" />
+                <Editor :content="selectedContent" :path="selectedPath" />
             </div>
         </div>
     </n-message-provider>
@@ -18,9 +18,22 @@ import FileTree from "../components/FileTree.vue";
 import Editor from "../components/Editor.vue";
 
 const selectedContent = ref("");
+const selectedPath = ref("");
 
-function handleFileSelected(content) {
-    selectedContent.value = content;
+/**
+ * FileTree now emits an object: { content, path }
+ * Update both selectedContent and selectedPath when a file is chosen.
+ */
+function handleFileSelected(payload) {
+    if (!payload) return;
+    // payload may be either the content string (legacy) or an object { content, path }
+    if (typeof payload === "string") {
+        selectedContent.value = payload;
+        // keep selectedPath unchanged in this legacy case
+    } else {
+        selectedContent.value = payload.content ?? "";
+        selectedPath.value = payload.path ?? "";
+    }
 }
 </script>
 

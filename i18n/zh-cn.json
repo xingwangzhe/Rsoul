@@ -1,0 +1,45 @@
+{
+  "app": {
+    "greeting": "你好",
+    "title": "Rsoul"
+  },
+  "nav": {
+    "home": "首页",
+    "about": "关于",
+    "settings": "设置"
+  },
+  "fileTree": {
+    "addFolder": "添加文件夹 📂",
+    "selected": "已选择: {{path}}",
+    "error": "错误：{{err}}",
+    "loading": "正在加载文件树...",
+    "empty": "尚未选择文件夹或文件夹为空。",
+    "backendEmpty": "后端返回空结果",
+    "readFileFailed": "读取文件失败：{{err}}",
+    "chooseFolder": "选择文件夹",
+    "refresh": "刷新"
+  },
+  "editor": {
+    "noPath": "未指定保存路径",
+    "saveSuccess": "保存成功",
+    "saveFailed": "保存失败：{{err}}",
+    "confirmSave": "是否保存更改？",
+    "saving": "正在保存..."
+  },
+  "messages": {
+    "ok": "确定",
+    "cancel": "取消",
+    "yes": "是",
+    "no": "否"
+  },
+  "settings": {
+    "language": "语言",
+    "theme": "主题",
+    "autoSave": "自动保存",
+    "saveInterval": "保存间隔（秒）"
+  },
+  "errors": {
+    "unknown": "发生未知错误",
+    "permissionDenied": "权限被拒绝"
+  }
+}
