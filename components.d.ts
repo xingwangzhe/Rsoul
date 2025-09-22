@@ -10,6 +10,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     Editor: typeof import('./src/components/Editor.vue')['default']
     FileTree: typeof import('./src/components/FileTree.vue')['default']
+    FrontmatterEditor: typeof import('./src/components/FrontmatterEditor.vue')['default']
     NConfigProvider: typeof import('naive-ui')['NConfigProvider']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

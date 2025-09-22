@@ -4,7 +4,12 @@
         v-model="text"
         :showToolbarName="true"
         @onSave="onSave"
-    />
+        :toolbars="toolbars"
+    >
+        <template #defToolbars>
+            <FrontmatterEditor />
+        </template>
+    </MdEditor>
 </template>
 
 <script setup lang="ts">
@@ -15,6 +20,43 @@ import { useMessage } from "naive-ui";
 import { invoke } from "@tauri-apps/api/core";
 import i18next from "i18next";
 import fm from "front-matter";
+import FrontmatterEditor from "./FrontmatterEditor.vue";
+
+const toolbars = [
+    0, // Custom FrontmatterEditor toolbar
+    "bold",
+    "underline",
+    "italic",
+    "-",
+    "title",
+    "strikeThrough",
+    "sub",
+    "sup",
+    "quote",
+    "unorderedList",
+    "orderedList",
+    "task",
+    "-",
+    "codeRow",
+    "code",
+    "link",
+    "image",
+    "table",
+    "mermaid",
+    "katex",
+    "-",
+    "revoke",
+    "next",
+    "save",
+    "=",
+    "pageFullscreen",
+    "fullscreen",
+    "preview",
+    "previewOnly",
+    // "htmlPreview",
+    "catalog",
+    "github",
+];
 const props = defineProps({
     content: String,
     path: String, // 接收文件保存路径
