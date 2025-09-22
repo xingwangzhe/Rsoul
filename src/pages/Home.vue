@@ -1,17 +1,14 @@
 <template>
     <div id="main-container">
         <div id="left-dir">
-            <div><n-button @click="getFileTree">添加文件夹📂</n-button></div>
+            <FileTree />
         </div>
         <div id="right-editor"></div>
     </div>
 </template>
 
 <script setup>
-import { invoke } from "@tauri-apps/api/core";
-function getFileTree() {
-    invoke("get_file_tree");
-}
+import FileTree from "../components/FileTree.vue";
 </script>
 
 <style scoped>
@@ -19,10 +16,12 @@ function getFileTree() {
     display: flex;
 
     & #left-dir {
-        width: 100vh;
+        width: 300px;
         height: 100vh;
         border: solid crimson;
-        flex: 1;
+        flex: none;
+        display: flex;
+        flex-direction: column;
     }
 
     & #right-editor {
