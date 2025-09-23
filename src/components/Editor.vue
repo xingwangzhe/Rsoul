@@ -7,7 +7,10 @@
         :toolbars="toolbars as any"
     >
         <template #defToolbars>
-            <FrontmatterEditor />
+            <FrontmatterEditor
+                :currentFrontmatter="frontmatter"
+                @updateFrontmatter="updateFrontmatter"
+            />
         </template>
     </MdEditor>
 </template>
@@ -20,6 +23,19 @@ import { useMessage } from "naive-ui";
 import { invoke } from "@tauri-apps/api/core";
 import i18next from "i18next";
 import fm from "front-matter";
+
+function serializeFM(attrs: Record<string, any>, content: string): string {
+    const lines: string[] = ["---"];
+    for (const [key, value] of Object.entries(attrs)) {
+        if (Array.isArray(value)) {
+            lines.push(`${key}: [${(value as any[]).join(", ")}]`);
+        } else {
+            lines.push(`${key}: ${value}`);
+        }
+    }
+    lines.push("---", "");
+    return lines.join("\n") + content;
+}
 import FrontmatterEditor from "./FrontmatterEditor.vue";
 
 const toolbars = [
@@ -63,12 +79,19 @@ const props = defineProps({
 });
 
 const text = ref("Hello Editor!");
+const frontmatter = ref<Record<string, any>>({});
+
+const updateFrontmatter = (newFrontmatter: Record<string, any>) => {
+    frontmatter.value = newFrontmatter;
+};
 
 watch(
     () => props.content,
     (newContent) => {
         if (newContent !== undefined) {
-            text.value = fm(newContent).body;
+            const parsed = fm(newContent);
+            text.value = parsed.body;
+            frontmatter.value = parsed.attributes as Record<string, any>;
         }
     },
 );
@@ -108,7 +131,7 @@ const onSave = async (v: any, h: any) => {
     console.debug("onSave triggered, md length:", v ? v.length : 0);
 
     if (!props.path) {
-        message.error(i18next.t("editor.noPath") as string, { duration: 3.5 });
+        message.error(i18next.t("editor.noPath") as string, { closable: true });
         return;
     }
 
@@ -126,18 +149,20 @@ const onSave = async (v: any, h: any) => {
             }
         }
 
-        // Save markdown content to backend
-        await saveMarkdown(v);
+        // Combine frontmatter and body into full markdown
+        const fullMarkdown = serializeFM(frontmatter.value, v);
 
+        // Save full markdown content to backend
+        await saveMarkdown(fullMarkdown);
         // Notify user of success
         message.success(i18next.t("editor.saveSuccess") as string, {
-            duration: 3.5,
+            closable: true,
         });
     } catch (err) {
         console.error("save_markdown invoke error:", err);
         message.error(
             i18next.t("editor.saveFailed", { err: String(err) }) as string,
-            { duration: 3.5 },
+            { closable: true },
         );
     }
 };

@@ -143,7 +143,7 @@ const saveData = async () => {
         }));
         await invoke("save_frontmatter", { fields });
     } catch (e) {
-        message.error(`保存失败: ${e}`);
+        message.error(`保存失败: ${e}`, { closable: true });
     }
 };
 
@@ -156,7 +156,7 @@ const loadData = async () => {
             type: item.field_type,
         }));
     } catch (e) {
-        message.error(`加载失败: ${e}`);
+        message.error(`加载失败: ${e}`, { closable: true });
     }
 };
 
@@ -166,7 +166,7 @@ onMounted(() => {
 
 const addField = async () => {
     if (!formData.value.key || !formData.value.type) {
-        message.warning("请填写键和类型");
+        message.warning("请填写键和类型", { closable: true });
         return;
     }
     const newKey = data.value.length;
@@ -177,7 +177,7 @@ const addField = async () => {
     });
     formData.value.key = "";
     formData.value.type = "";
-    message.success("字段添加成功");
+    message.success("字段添加成功", { closable: true });
     await saveData();
 };
 
@@ -192,7 +192,7 @@ const editField = (index: number) => {
 
 const saveEdit = async () => {
     if (!editFormData.value.key || !editFormData.value.type) {
-        message.warning("请填写键和类型");
+        message.warning("请填写键和类型", { closable: true });
         return;
     }
     const index = data.value.findIndex(
@@ -201,7 +201,7 @@ const saveEdit = async () => {
     if (index !== -1) {
         data.value[index].title = editFormData.value.key;
         data.value[index].type = editFormData.value.type;
-        message.success("字段编辑成功");
+        message.success("字段编辑成功", { closable: true });
         await saveData();
     }
     showEditModal.value = false;
@@ -211,7 +211,7 @@ const deleteField = async (index: number) => {
     const idx = data.value.findIndex((item) => item.key === index);
     if (idx !== -1) {
         data.value.splice(idx, 1);
-        message.success("字段删除成功");
+        message.success("字段删除成功", { closable: true });
         await saveData();
     }
 };
