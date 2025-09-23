@@ -34,12 +34,8 @@ export interface NaiveNode {
  * 将后端节点映射为 Naive UI 节点
  */
 export function mapNode(b: BackendNode): NaiveNode {
-  let label = b.name;
-  if (!b.is_dir && b.size != null) {
-    label += ` (t{formatSize(b.size)})`;
-  }
   const node: NaiveNode = {
-    label,
+    label: b.name,
     key: b.path,
     isDir: b.is_dir,
     prefix: b.is_dir

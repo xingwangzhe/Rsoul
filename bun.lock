@@ -10,6 +10,8 @@
         "@tauri-apps/plugin-opener": "^2.5.0",
         "@tauri-apps/plugin-store": "~2.4.0",
         "@unhead/vue": "^2.0.17",
+        "@vavt/cm-extension": "^1.11.0",
+        "@vavt/md-editor-extension": "https://github.com/imzbf/md-editor-extension.git",
         "@vicons/ionicons5": "^0.13.0",
         "front-matter": "^4.0.2",
         "md-editor-v3": "^6.0.1",
@@ -302,7 +304,11 @@
 
     "@unhead/vue": ["@unhead/vue@2.0.17", "https://registry.npmmirror.com/@unhead/vue/-/vue-2.0.17.tgz", { "dependencies": { "hookable": "^5.5.3", "unhead": "2.0.17" }, "peerDependencies": { "vue": ">=3.5.18" } }, "sha512-jzmGZYeMAhETV6qfetmLbZzUjjx1TjdNvFSobeFZb73D7dwD9wl/nOAx36qq+TvjZsLJdF5PQWToz2oDGAUqCg=="],
 
+    "@vavt/cm-extension": ["@vavt/cm-extension@1.11.0", "https://registry.npmmirror.com/@vavt/cm-extension/-/cm-extension-1.11.0.tgz", {}, "sha512-rwKoSSBGpP2ayH5cO4ZrweJtmeIVkvSgoyILL24BTb9vkItXwRTDV6ctrdIaD0yJ8OQ8Lez6jlWVLfS9Ipk6Zw=="],
+
     "@vavt/copy2clipboard": ["@vavt/copy2clipboard@1.0.3", "https://registry.npmmirror.com/@vavt/copy2clipboard/-/copy2clipboard-1.0.3.tgz", {}, "sha512-HtG48r2FBYp9eRvGB3QGmtRBH1zzRRAVvFbGgFstOwz4/DDaNiX0uZc3YVKPydqgOav26pibr9MtoCaWxn7aeA=="],
+
+    "@vavt/md-editor-extension": ["@vavt/md-editor-extension@github:imzbf/md-editor-extension#47a8919", {}, "imzbf-md-editor-extension-47a8919"],
 
     "@vavt/util": ["@vavt/util@2.1.0", "https://registry.npmmirror.com/@vavt/util/-/util-2.1.0.tgz", {}, "sha512-YIfAvArSFVXmWvoF+DEGD0FhkhVNcCtVWWkfYtj76eSrwHh/wuEEFhiEubg1XLNM3tChO8FH8xJCT/hnizjgFQ=="],
 

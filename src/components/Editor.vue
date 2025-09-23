@@ -6,6 +6,7 @@
         @onSave="onSave"
         :toolbars="toolbars as any"
         :theme="theme"
+        :language="currentLanguage"
     >
         <template #defToolbars>
             <FrontmatterEditor
@@ -17,19 +18,37 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from "vue";
-import { MdEditor } from "md-editor-v3";
+import { ref, watch, onMounted, computed } from "vue";
+import { MdEditor, config } from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
 import { useMessage } from "naive-ui";
 import { useI18n } from "vue-i18n";
 import fm from "front-matter";
 import { listen } from "@tauri-apps/api/event";
 import { invoke } from "@tauri-apps/api/core";
+import ZH_TW from "@vavt/cm-extension/dist/locale/zh-TW";
 
 import { handleSave } from "../utils/editorUtils";
 import FrontmatterEditor from "./FrontmatterEditor.vue";
+config({
+    editorConfig: {
+        languageUserDefined: {
+            "zh-TW": ZH_TW,
+        },
+    },
+});
+const { t, locale } = useI18n();
 
-const { t } = useI18n();
+const currentLanguage = computed(() => {
+    switch (locale.value) {
+        case "zh-cn":
+            return "zh-CN";
+        case "zh-hk":
+            return "zh-TW";
+        default:
+            return "en-US";
+    }
+});
 
 const theme = ref<"light" | "dark">("light");
 

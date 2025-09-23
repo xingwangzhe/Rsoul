@@ -15,7 +15,7 @@ import { ref, onMounted } from "vue";
 import { NSelect } from "naive-ui";
 import { useI18n } from "vue-i18n";
 import { invoke } from "@tauri-apps/api/core";
-import { listen } from "@tauri-apps/api/event";
+// import { listen } from "@tauri-apps/api/event";
 
 const { locale } = useI18n();
 
@@ -71,19 +71,19 @@ onMounted(async () => {
     }
 
     // Listen for language changes from backend
-    const unlisten = await listen<string>("lang_changed", (event) => {
-        const lang = event.payload;
-        if (lang && ["en", "zh-cn", "zh-hk"].includes(lang)) {
-            selectedLanguage.value = lang;
-            locale.value = lang;
-            const langMap: { [key: string]: string } = {
-                "zh-cn": "zh-CN",
-                "zh-hk": "zh-HK",
-                en: "en",
-            };
-            document.documentElement.lang = langMap[lang] || lang;
-        }
-    });
+    // const unlisten = await listen<string>("lang_changed", (event) => {
+    //     const lang = event.payload;
+    //     if (lang && ["en", "zh-cn", "zh-hk"].includes(lang)) {
+    //         selectedLanguage.value = lang;
+    //         locale.value = lang;
+    //         const langMap: { [key: string]: string } = {
+    //             "zh-cn": "zh-CN",
+    //             "zh-hk": "zh-HK",
+    //             en: "en",
+    //         };
+    //         document.documentElement.lang = langMap[lang] || lang;
+    //     }
+    //
 });
 </script>
 
