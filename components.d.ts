@@ -11,7 +11,6 @@ declare module 'vue' {
     Editor: typeof import('./src/components/Editor.vue')['default']
     FileTree: typeof import('./src/components/FileTree.vue')['default']
     FrontmatterEditor: typeof import('./src/components/FrontmatterEditor.vue')['default']
-    LanguageSwitcher: typeof import('./src/components/LanguageSwitcher.vue')['default']
     NDataTable: typeof import('naive-ui')['NDataTable']
     NFlex: typeof import('naive-ui')['NFlex']
     NGlobalStyle: typeof import('naive-ui')['NGlobalStyle']
@@ -19,5 +18,6 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     SetFrontmatter: typeof import('./src/components/SetFrontmatter.vue')['default']
     SwitchDark: typeof import('./src/components/SwitchDark.vue')['default']
+    SwitchLang: typeof import('./src/components/SwitchLang.vue')['default']
   }
 }

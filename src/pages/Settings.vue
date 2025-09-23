@@ -1,6 +1,6 @@
 <template>
     <div class="settings-container">
-        <LanguageSwitcher />
+        <SwitchLang />
         <br />
         <SwitchDark />
         <br />
@@ -8,7 +8,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import LanguageSwitcher from "../components/LanguageSwitcher.vue";
+import SwitchLang from "../components/SwitchLang.vue";
 import SwitchDark from "../components/SwitchDark.vue";
 import SetFrontmatter from "../components/SetFrontmatter.vue";
 </script>
