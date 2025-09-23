@@ -4,7 +4,7 @@
         v-model="text"
         :showToolbarName="true"
         @onSave="onSave"
-        :toolbars="toolbars"
+        :toolbars="toolbars as any"
     >
         <template #defToolbars>
             <FrontmatterEditor />

@@ -1,6 +1,7 @@
 <template>
     <NormalToolbar title="mark" @onClick="handler">
         <BookMarked class="md-editor-icon" />
+        mark
     </NormalToolbar>
 </template>
 

@@ -24,7 +24,7 @@
                 v-else-if="treeData.length"
                 :data="treeData"
                 :node-props="nodeProps"
-                :on-update:expanded-keys="updatePrefixWithExpaned"
+                :on-update:expanded-keys="updatePrefixWithExpanded"
                 style="height: 100vh"
             />
 
@@ -34,22 +34,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, h } from "vue";
-import { NButton, NTree, NSpin, NIcon } from "naive-ui";
+import { ref, onMounted } from "vue";
+import { NButton, NTree, NSpin } from "naive-ui";
 import { invoke } from "@tauri-apps/api/core";
 import type { TreeOption } from "naive-ui";
-import {
-    FileTrayFullOutline,
-    Folder,
-    FolderOpenOutline,
-} from "@vicons/ionicons5";
 
 import i18next from "i18next";
 
 import {
     mapNode,
-    formatSize,
-    updatePrefixWithExpaned,
+    updatePrefixWithExpanded,
     BackendNode,
     NaiveNode,
 } from "../utils/fileTreeUtils";
@@ -130,7 +124,7 @@ async function getFileTree() {
 // 在组件挂载时自动加载存储的路径
 onMounted(async () => {
     try {
-        const path = await invoke<Option<string>>("get_stored_path");
+        const path = await invoke<string | null>("get_stored_path");
         if (path) {
             await loadFileTree(path);
         }
@@ -142,7 +136,7 @@ onMounted(async () => {
 function nodeProps({ option }: { option: TreeOption }) {
     return {
         onClick() {
-            handleNodeClick(option as NaiveNode);
+            handleNodeClick(option as unknown as NaiveNode);
         },
     };
 }
