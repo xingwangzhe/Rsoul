@@ -160,7 +160,28 @@ async function openModal() {
     }
 
     // 初始化 formData
-    formData.value = initializeFormData(schema.value, props.currentFrontmatter);
+    formData.value = await initializeFormData(
+        schema.value,
+        props.currentFrontmatter,
+    );
+
+    // 将日期/时间字符串转换为 Date 对象
+    schema.value.forEach((field) => {
+        if (
+            ["date", "time", "dateandtime"].includes(field.field_type) &&
+            formData.value[field.title] &&
+            typeof formData.value[field.title] === "string"
+        ) {
+            try {
+                formData.value[field.title] = new Date(
+                    formData.value[field.title],
+                );
+            } catch {
+                formData.value[field.title] = null;
+            }
+        }
+    });
+
     console.log("初始化的 formData:", formData.value);
 
     loading.value = false;
@@ -185,7 +206,7 @@ function getOptionsForField(field: { title: string; field_type: string }) {
  * 1. 将字符串值、数组和数字等转换到正确类型
  * 2. 发出 updateFrontmatter 事件
  */
-function saveFrontmatter() {
+async function saveFrontmatter() {
     // 如果 schema 为空，直接保存空对象，确保面板能正常关闭
     if (schema.value.length === 0) {
         emit("updateFrontmatter", {});
@@ -193,7 +214,10 @@ function saveFrontmatter() {
         return;
     }
 
-    const output = saveFormDataToFrontmatter(schema.value, formData.value);
+    const output = await saveFormDataToFrontmatter(
+        schema.value,
+        formData.value,
+    );
     emit("updateFrontmatter", output);
     showModal.value = false;
 }

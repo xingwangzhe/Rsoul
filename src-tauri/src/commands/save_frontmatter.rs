@@ -2,6 +2,7 @@ use serde::{Deserialize, Serialize};
 use serde_json;
 use std::collections::HashMap;
 use std::fs;
+use tauri::command;
 use tauri_plugin_store::StoreExt;
 use walkdir::WalkDir;
 
@@ -186,6 +187,157 @@ pub async fn load_frontmatter_suggestions(
     });
 
     Ok(suggestions)
+}
+
+#[tauri::command]
+pub fn initialize_form_data(
+    schema: Vec<FrontmatterField>,
+    current_frontmatter: serde_json::Value,
+) -> Result<serde_json::Value, String> {
+    let mut form_data = serde_json::Map::new();
+    let current: HashMap<String, serde_json::Value> =
+        serde_json::from_value(current_frontmatter).unwrap_or_default();
+
+    for field in schema {
+        let val = current.get(&field.title);
+        match field.field_type.as_str() {
+            "string[]" => {
+                if let Some(v) = val {
+                    if v.is_array() {
+                        form_data.insert(field.title, v.clone());
+                    } else if v.is_string() {
+                        let arr: Vec<serde_json::Value> = v
+                            .as_str()
+                            .unwrap()
+                            .split(',')
+                            .map(|s| serde_json::Value::String(s.trim().to_string()))
+                            .filter(|s| !s.as_str().unwrap().is_empty())
+                            .collect();
+                        form_data.insert(field.title, serde_json::Value::Array(arr));
+                    } else {
+                        form_data.insert(field.title, serde_json::Value::Array(vec![]));
+                    }
+                } else {
+                    form_data.insert(field.title, serde_json::Value::Array(vec![]));
+                }
+            }
+            "date" | "time" | "dateandtime" => {
+                if let Some(v) = val {
+                    if v.is_string() {
+                        form_data.insert(field.title, v.clone());
+                    } else {
+                        form_data.insert(field.title, serde_json::Value::Null);
+                    }
+                } else {
+                    form_data.insert(field.title, serde_json::Value::Null);
+                }
+            }
+            _ => {
+                let default_val = match field.field_type.as_str() {
+                    "number" => serde_json::Value::Number(0.into()),
+                    _ => serde_json::Value::String("".to_string()),
+                };
+                form_data.insert(field.title, val.cloned().unwrap_or(default_val));
+            }
+        }
+    }
+    Ok(serde_json::Value::Object(form_data))
+}
+
+#[tauri::command]
+pub fn save_form_data_to_frontmatter(
+    schema: Vec<FrontmatterField>,
+    form_data: serde_json::Value,
+) -> Result<serde_json::Value, String> {
+    let form: HashMap<String, serde_json::Value> =
+        serde_json::from_value(form_data).unwrap_or_default();
+    let mut output = serde_json::Map::new();
+
+    for field in schema {
+        let raw = form.get(&field.title);
+        match field.field_type.as_str() {
+            "number" => {
+                if let Some(v) = raw {
+                    if let Some(n) = v.as_f64() {
+                        output.insert(field.title, serde_json::Value::Number((n as i64).into()));
+                    }
+                }
+            }
+            "string[]" => {
+                if let Some(v) = raw {
+                    if v.is_array() {
+                        output.insert(field.title, v.clone());
+                    } else if v.is_string() {
+                        let arr: Vec<serde_json::Value> = v
+                            .as_str()
+                            .unwrap()
+                            .split(',')
+                            .map(|s| serde_json::Value::String(s.trim().to_string()))
+                            .filter(|s| !s.as_str().unwrap().is_empty())
+                            .collect();
+                        output.insert(field.title, serde_json::Value::Array(arr));
+                    }
+                }
+            }
+            "date" => {
+                if let Some(v) = raw {
+                    if v.is_string() {
+                        let date_str = v.as_str().unwrap();
+                        if !date_str.is_empty() {
+                            output.insert(
+                                field.title,
+                                serde_json::Value::String(date_str.to_string()),
+                            );
+                        }
+                    }
+                }
+            }
+            "time" => {
+                if let Some(v) = raw {
+                    if v.is_string() {
+                        let time_str = v.as_str().unwrap();
+                        if !time_str.is_empty() {
+                            output.insert(
+                                field.title,
+                                serde_json::Value::String(time_str.to_string()),
+                            );
+                        }
+                    }
+                }
+            }
+            "dateandtime" => {
+                if let Some(v) = raw {
+                    if v.is_string() {
+                        let datetime_str = v.as_str().unwrap();
+                        if !datetime_str.is_empty() {
+                            output.insert(
+                                field.title,
+                                serde_json::Value::String(datetime_str.to_string()),
+                            );
+                        }
+                    }
+                }
+            }
+            _ => {
+                if let Some(v) = raw {
+                    output.insert(field.title, v.clone());
+                }
+            }
+        }
+    }
+
+    let has_content = output.values().any(|v| match v {
+        serde_json::Value::Array(arr) => !arr.is_empty(),
+        serde_json::Value::String(s) => !s.trim().is_empty(),
+        serde_json::Value::Number(_) => true,
+        _ => false,
+    });
+
+    if has_content {
+        Ok(serde_json::Value::Object(output))
+    } else {
+        Ok(serde_json::Value::Object(serde_json::Map::new()))
+    }
 }
 
 fn extract_frontmatter(content: &str) -> Option<HashMap<String, serde_yaml::Value>> {

@@ -2,8 +2,8 @@ mod commands;
 use commands::get_file_content::get_file_content;
 use commands::get_file_tree::{get_file_tree, get_file_tree_from_path, get_stored_path};
 use commands::save_frontmatter::{
-    collect_frontmatter_suggestions, load_frontmatter, load_frontmatter_suggestions,
-    save_frontmatter,
+    collect_frontmatter_suggestions, initialize_form_data, load_frontmatter,
+    load_frontmatter_suggestions, save_form_data_to_frontmatter, save_frontmatter,
 };
 use commands::save_markdown::{save_markdown, save_markdown_with_frontmatter};
 use tauri::menu::MenuBuilder;
@@ -25,7 +25,9 @@ pub fn run() {
             save_frontmatter,
             load_frontmatter,
             collect_frontmatter_suggestions,
-            load_frontmatter_suggestions
+            load_frontmatter_suggestions,
+            initialize_form_data,
+            save_form_data_to_frontmatter
         ])
         .setup(|app| {
             let menu = MenuBuilder::new(app)

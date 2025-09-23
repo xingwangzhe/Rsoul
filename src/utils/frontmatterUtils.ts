@@ -50,21 +50,31 @@ export async function saveFrontmatterFields(
 }
 
 /**
- * 根据字段类型提供默认值
+ * 初始化表单数据（后端处理）
  */
-export function defaultForType(type: string): any {
-  switch (type) {
-    case "number":
-      return 0;
-    case "string[]":
-      return [];
-    case "date":
-    case "time":
-    case "dateandtime":
-      return null;
-    default:
-      return "";
-  }
+export async function initializeFormData(
+  schema: Array<{ key: number; title: string; field_type: string }>,
+  currentFrontmatter: Record<string, any> = {},
+): Promise<Record<string, any>> {
+  const result = await invoke("initialize_form_data", {
+    schema,
+    currentFrontmatter,
+  });
+  return result as Record<string, any>;
+}
+
+/**
+ * 保存表单数据到 frontmatter（后端处理）
+ */
+export async function saveFormDataToFrontmatter(
+  schema: Array<{ key: number; title: string; field_type: string }>,
+  formData: Record<string, any>,
+): Promise<Record<string, any>> {
+  const result = await invoke("save_form_data_to_frontmatter", {
+    schema,
+    formData,
+  });
+  return result as Record<string, any>;
 }
 
 /**
@@ -97,94 +107,4 @@ export function getFieldOptions(
   });
   console.log(`字段 ${fieldTitle} 的选项:`, options);
   return options;
-}
-
-/**
- * 初始化表单数据
- */
-export function initializeFormData(
-  schema: Array<{ key: number; title: string; field_type: string }>,
-  currentFrontmatter: Record<string, any> = {},
-): Record<string, any> {
-  const formData: Record<string, any> = {};
-  schema.forEach((f) => {
-    const val = currentFrontmatter[f.title];
-    if (f.field_type === "string[]") {
-      if (Array.isArray(val)) {
-        formData[f.title] = val;
-      } else if (typeof val === "string") {
-        formData[f.title] = val
-          .split(",")
-          .map((s) => s.trim())
-          .filter((s) => s);
-      } else {
-        formData[f.title] = [];
-      }
-    } else if (
-      f.field_type === "date" ||
-      f.field_type === "time" ||
-      f.field_type === "dateandtime"
-    ) {
-      if (val) {
-        try {
-          formData[f.title] = new Date(val);
-        } catch {
-          formData[f.title] = null;
-        }
-      } else {
-        formData[f.title] = null;
-      }
-    } else {
-      formData[f.title] = val != null ? val : defaultForType(f.field_type);
-    }
-  });
-  return formData;
-}
-
-/**
- * 保存表单数据到 frontmatter
- */
-export function saveFormDataToFrontmatter(
-  schema: Array<{ key: number; title: string; field_type: string }>,
-  formData: Record<string, any>,
-): Record<string, any> {
-  const output: Record<string, any> = {};
-  schema.forEach((f) => {
-    const raw = formData[f.title];
-    switch (f.field_type) {
-      case "number":
-        output[f.title] = Number(raw);
-        break;
-      case "string[]":
-        if (Array.isArray(raw)) {
-          output[f.title] = raw as any[];
-        } else {
-          const str = raw != null ? String(raw) : "";
-          output[f.title] = str
-            .split(",")
-            .map((s) => s.trim())
-            .filter((s) => s);
-        }
-        break;
-      case "date":
-        output[f.title] =
-          raw instanceof Date ? raw.toISOString().slice(0, 10) : "";
-        break;
-      case "time":
-        output[f.title] =
-          raw instanceof Date ? raw.toISOString().slice(11, 16) : "";
-        break;
-      case "dateandtime":
-        output[f.title] = raw instanceof Date ? raw.toISOString() : "";
-        break;
-      default:
-        output[f.title] = raw;
-    }
-  });
-  const hasActualContent = Object.values(output).some(
-    (val) =>
-      val != null &&
-      (Array.isArray(val) ? val.length > 0 : String(val).trim() !== ""),
-  );
-  return hasActualContent ? output : {};
 }
