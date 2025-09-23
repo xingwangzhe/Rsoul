@@ -12,8 +12,11 @@ declare module 'vue' {
     FileTree: typeof import('./src/components/FileTree.vue')['default']
     FrontmatterEditor: typeof import('./src/components/FrontmatterEditor.vue')['default']
     NConfigProvider: typeof import('naive-ui')['NConfigProvider']
+    NDataTable: typeof import('naive-ui')['NDataTable']
+    NMessageProvider: typeof import('naive-ui')['NMessageProvider']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SetFrontmatter: typeof import('./src/components/SetFrontmatter.vue')['default']
     SwitchDark: typeof import('./src/components/SwitchDark.vue')['default']
   }
 }

@@ -1,6 +1,7 @@
 mod commands;
 use commands::get_file_content::get_file_content;
 use commands::get_file_tree::{get_file_tree, get_file_tree_from_path, get_stored_path};
+use commands::save_frontmatter::{load_frontmatter, save_frontmatter};
 use commands::save_markdown::save_markdown;
 use tauri::menu::MenuBuilder;
 use tauri::Emitter;
@@ -16,7 +17,9 @@ pub fn run() {
             get_file_tree_from_path,
             get_stored_path,
             get_file_content,
-            save_markdown
+            save_markdown,
+            save_frontmatter,
+            load_frontmatter
         ])
         .setup(|app| {
             let menu = MenuBuilder::new(app)
