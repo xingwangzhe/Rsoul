@@ -60,6 +60,7 @@ import {
 import {
     loadFrontmatterSchema,
     saveFrontmatterFields,
+    collectFrontmatterSuggestions,
 } from "../utils/frontmatterUtils";
 
 interface RowData {
@@ -139,6 +140,8 @@ const saveData = async () => {
             field_type: item.type,
         }));
         await saveFrontmatterFields(fields);
+        // 保存字段配置后重新收集建议
+        await collectFrontmatterSuggestions();
     } catch (e) {
         message.error(`保存失败: ${e}`, { closable: true });
     }

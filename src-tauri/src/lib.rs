@@ -5,7 +5,7 @@ use commands::save_frontmatter::{
     collect_frontmatter_suggestions, load_frontmatter, load_frontmatter_suggestions,
     save_frontmatter,
 };
-use commands::save_markdown::save_markdown;
+use commands::save_markdown::{save_markdown, save_markdown_with_frontmatter};
 use tauri::menu::MenuBuilder;
 use tauri::Emitter;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -21,6 +21,7 @@ pub fn run() {
             get_stored_path,
             get_file_content,
             save_markdown,
+            save_markdown_with_frontmatter,
             save_frontmatter,
             load_frontmatter,
             collect_frontmatter_suggestions,

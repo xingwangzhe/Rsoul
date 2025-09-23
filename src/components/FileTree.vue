@@ -48,6 +48,7 @@ import {
     getStoredPath,
     getFileContent,
 } from "../utils/fileTreeUtils";
+import { collectFrontmatterSuggestions } from "../utils/frontmatterUtils";
 
 const emit = defineEmits(["fileSelected"]);
 
@@ -86,6 +87,15 @@ async function getFileTree() {
     error.value = result.error;
     selectedPath.value = result.selectedPath;
     loading.value = false;
+
+    // 选择文件夹后收集 frontmatter 建议
+    if (result.treeData.length > 0) {
+        try {
+            await collectFrontmatterSuggestions();
+        } catch (e) {
+            console.warn("收集 frontmatter 建议失败:", e);
+        }
+    }
 }
 
 // 在组件挂载时自动加载存储的路径
@@ -93,6 +103,12 @@ onMounted(async () => {
     const path = await getStoredPath();
     if (path) {
         await loadFileTreeWrapper(path);
+        // 加载存储路径后收集 frontmatter 建议
+        try {
+            await collectFrontmatterSuggestions();
+        } catch (e) {
+            console.warn("收集 frontmatter 建议失败:", e);
+        }
     }
 });
 

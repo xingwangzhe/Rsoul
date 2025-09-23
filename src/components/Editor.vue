@@ -22,7 +22,7 @@ import "md-editor-v3/lib/style.css";
 import { useMessage } from "naive-ui";
 import i18next from "i18next";
 import fm from "front-matter";
-import { serializeFM } from "../utils/frontmatterUtils";
+
 import { handleSave } from "../utils/editorUtils";
 import FrontmatterEditor from "./FrontmatterEditor.vue";
 
@@ -119,7 +119,7 @@ const onSave = async (v: any, h: any) => {
         }
 
         // 使用提取的 handleSave 函数
-        await handleSave(v, frontmatter.value, props.path, serializeFM);
+        await handleSave(v, frontmatter.value, props.path);
 
         // 通知用户成功
         message.success(i18next.t("editor.saveSuccess") as string, {

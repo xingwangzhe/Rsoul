@@ -26,25 +26,19 @@ export async function saveMarkdown(
 
 /**
  * 处理保存带有 frontmatter 的 markdown 内容。
- * 将 frontmatter 和正文组合成完整的 markdown，保存它，并更新建议。
+ * 将 frontmatter 和正文发送到后端进行序列化和保存，并更新建议。
  */
 export async function handleSave(
   text: string,
   frontmatter: Record<string, any>,
   filePath: string,
-  serializeFM: (attrs: Record<string, any>, content: string) => string,
 ): Promise<void> {
-  // 将 frontmatter 和正文组合成完整的 markdown
-  const hasFrontmatterContent = Object.values(frontmatter).some((val) => {
-    if (Array.isArray(val)) return val.length > 0;
-    return val != null && String(val).trim() !== "";
+  // 发送 frontmatter 和内容到后端，后端处理序列化和保存
+  await invoke("save_markdown_with_frontmatter", {
+    frontmatter,
+    content: text,
+    filePath,
   });
-  const fullMarkdown = hasFrontmatterContent
-    ? serializeFM(frontmatter, text)
-    : text;
-
-  // 保存完整的 markdown 内容到后端
-  await saveMarkdown(fullMarkdown, filePath);
 
   // 更新 frontmatter 建议
   try {

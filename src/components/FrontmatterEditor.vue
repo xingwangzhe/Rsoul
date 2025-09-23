@@ -30,7 +30,7 @@
                 <n-select
                     v-if="field.field_type === 'string'"
                     v-model:value="formData[field.title]"
-                    :options="getFieldOptions(field.title, suggestions)"
+                    :options="getOptionsForField(field)"
                     placeholder="选择或输入值"
                     filterable
                     clearable
@@ -39,7 +39,7 @@
                 <n-select
                     v-else-if="field.field_type === 'string[]'"
                     v-model:value="formData[field.title]"
-                    :options="getFieldOptions(field.title, suggestions)"
+                    :options="getOptionsForField(field)"
                     placeholder="选择或输入标签"
                     filterable
                     multiple
@@ -140,12 +140,18 @@ async function openModal() {
         if (schema.value.length === 0) {
             schema.value = await loadFrontmatterSchema();
         }
+        console.log("加载的 schema:", schema.value);
+
         // Load or collect suggestions
         let loadedSuggestions = await loadFrontmatterSuggestions();
+        console.log("初始加载的 suggestions:", loadedSuggestions);
+
         if (Object.keys(loadedSuggestions).length === 0) {
+            console.log("没有找到 suggestions，开始收集...");
             // No suggestions, collect them
             await collectFrontmatterSuggestions();
             loadedSuggestions = await loadFrontmatterSuggestions();
+            console.log("收集后的 suggestions:", loadedSuggestions);
         }
         suggestions.value = loadedSuggestions;
     } catch (e) {
@@ -155,8 +161,23 @@ async function openModal() {
 
     // 初始化 formData
     formData.value = initializeFormData(schema.value, props.currentFrontmatter);
+    console.log("初始化的 formData:", formData.value);
 
     loading.value = false;
+}
+
+/**
+ * 获取字段的选项，根据字段类型传递当前值
+ */
+function getOptionsForField(field: { title: string; field_type: string }) {
+    const currentValue = formData.value[field.title];
+    let currentValues: string[] = [];
+    if (field.field_type === "string[]") {
+        currentValues = Array.isArray(currentValue) ? currentValue : [];
+    } else if (field.field_type === "string" && currentValue) {
+        currentValues = [currentValue];
+    }
+    return getFieldOptions(field.title, suggestions.value, currentValues);
 }
 
 /**

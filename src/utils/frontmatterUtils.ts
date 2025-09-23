@@ -3,25 +3,6 @@
 import { invoke } from "@tauri-apps/api/core";
 
 /**
- * 序列化 frontmatter 到 markdown 字符串
- */
-export function serializeFM(
-  attrs: Record<string, any>,
-  content: string,
-): string {
-  const lines: string[] = ["---"];
-  for (const [key, value] of Object.entries(attrs)) {
-    if (Array.isArray(value)) {
-      lines.push(`${key}: [${(value as any[]).join(", ")}]`);
-    } else {
-      lines.push(`${key}: ${value}`);
-    }
-  }
-  lines.push("---", "");
-  return lines.join("\n") + content;
-}
-
-/**
  * 加载 frontmatter schema
  */
 export async function loadFrontmatterSchema(): Promise<
@@ -92,12 +73,30 @@ export function defaultForType(type: string): any {
 export function getFieldOptions(
   fieldTitle: string,
   suggestions: Record<string, Array<{ value: string; count: number }>>,
+  currentValues?: string[],
 ): Array<{ label: string; value: string }> {
+  console.log(
+    `获取字段 ${fieldTitle} 的选项，suggestions 中所有字段:`,
+    Object.keys(suggestions),
+  );
   const fieldSuggestions = suggestions[fieldTitle] || [];
-  return fieldSuggestions.map((s) => ({
-    label: `${s.value} (${s.count})`,
-    value: s.value,
-  }));
+  console.log(`字段 ${fieldTitle} 的建议:`, fieldSuggestions);
+  const options = fieldSuggestions.map((s) => {
+    let displayCount = s.count;
+    if (
+      currentValues &&
+      Array.isArray(currentValues) &&
+      currentValues.includes(s.value)
+    ) {
+      displayCount += 1;
+    }
+    return {
+      label: `${s.value} (${displayCount})`,
+      value: s.value,
+    };
+  });
+  console.log(`字段 ${fieldTitle} 的选项:`, options);
+  return options;
 }
 
 /**
