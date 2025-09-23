@@ -1,0 +1,17 @@
+#main-container {
+    display: flex;
+
+    & #left-dir {
+        width: 300px;
+        height: var(--full-height);
+        flex: none;
+        display: flex;
+        flex-direction: column;
+    }
+
+    & #right-editor {
+        width: 100vh;
+        height: var(--full-height);
+        flex: 8;
+    }
+}

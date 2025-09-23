@@ -37,23 +37,4 @@ function handleFileSelected(payload) {
 }
 </script>
 
-<style scoped>
-#main-container {
-    display: flex;
-
-    & #left-dir {
-        width: 300px;
-        height: 100vh;
-
-        flex: none;
-        display: flex;
-        flex-direction: column;
-    }
-
-    & #right-editor {
-        width: 100vh;
-        height: 100vh;
-        flex: 8;
-    }
-}
-</style>
+<style src="./css/Home.css" scoped></style>

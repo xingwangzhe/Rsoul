@@ -11,6 +11,7 @@ import i18next from "i18next";
 import en from "../i18n/en.json";
 import zhCN from "../i18n/zh-cn.json";
 import zhHK from "../i18n/zh-hk.json";
+import "./css/global.css";
 
 const routes = [
   { path: "/", name: "Home", component: Home },

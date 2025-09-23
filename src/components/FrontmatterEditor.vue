@@ -223,14 +223,4 @@ async function saveFrontmatter() {
 }
 </script>
 
-<style scoped>
-.n-form {
-    margin-top: 12px;
-}
-.n-form-item {
-    margin-bottom: 12px;
-}
-.n-button {
-    margin-right: 8px;
-}
-</style>
+<style src="./css/FrontmatterEditor.css" scoped></style>

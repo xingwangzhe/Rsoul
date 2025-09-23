@@ -1,0 +1,44 @@
+.file-tree-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.controls {
+    padding: var(--padding-small);
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+.selected {
+    margin-top: 4px;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+.error {
+    margin-top: 4px;
+    font-size: 14px;
+    color: var(--error-color);
+}
+
+.tree-area {
+    flex: 1;
+    overflow: auto;
+    padding: var(--padding-small);
+}
+
+.loading {
+    display: flex;
+    gap: var(--padding-small);
+    align-items: center;
+    color: var(--text-muted);
+}
+
+.empty {
+    color: var(--text-muted);
+}
+
+.n-tree {
+    max-height: 100%;
+}

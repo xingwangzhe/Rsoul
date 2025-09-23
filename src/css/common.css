@@ -1,0 +1,50 @@
+/* Common CSS variables and shared styles */
+
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --border-color: #ddd;
+    --error-color: #f44336;
+    --success-color: #28a745;
+    --text-color: #333;
+    --text-muted: #666;
+    --background-color: #fff;
+    --background-muted: #f8f9fa;
+    --border-radius: 4px;
+    --padding-small: 8px;
+    --padding-medium: 16px;
+    --margin-small: 8px;
+    --margin-medium: 16px;
+}
+
+/* Common utility classes */
+.text-error {
+    color: var(--error-color);
+}
+
+.text-muted {
+    color: var(--text-muted);
+}
+
+.border-bottom {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.full-height {
+    height: 100vh;
+}
+
+.overflow-auto {
+    overflow: auto;
+}

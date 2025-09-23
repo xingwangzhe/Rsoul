@@ -134,8 +134,4 @@ const onSave = async (v: any, h: any) => {
     }
 };
 </script>
-<style scope>
-#editor-area {
-    height: 100vh;
-}
-</style>
+<style src="./css/Editor.css" scoped></style>
