@@ -48,7 +48,6 @@
 </template>
 <script setup lang="ts">
 import { ref, h, onMounted } from "vue";
-import { invoke } from "@tauri-apps/api/core";
 import {
     useMessage,
     NForm,
@@ -58,17 +57,15 @@ import {
     NButton,
     NModal,
 } from "naive-ui";
+import {
+    loadFrontmatterSchema,
+    saveFrontmatterFields,
+} from "../utils/frontmatterUtils";
 
 interface RowData {
     key: number;
     title: string;
     type: string;
-}
-
-interface FrontmatterField {
-    key: number;
-    title: string;
-    field_type: string;
 }
 
 const message = useMessage();
@@ -136,12 +133,12 @@ const columns = [
 
 const saveData = async () => {
     try {
-        const fields: FrontmatterField[] = data.value.map((item) => ({
+        const fields = data.value.map((item) => ({
             key: item.key,
             title: item.title,
             field_type: item.type,
         }));
-        await invoke("save_frontmatter", { fields });
+        await saveFrontmatterFields(fields);
     } catch (e) {
         message.error(`保存失败: ${e}`, { closable: true });
     }
@@ -149,7 +146,7 @@ const saveData = async () => {
 
 const loadData = async () => {
     try {
-        const fields: FrontmatterField[] = await invoke("load_frontmatter");
+        const fields = await loadFrontmatterSchema();
         data.value = fields.map((item) => ({
             key: item.key,
             title: item.title,

@@ -6,6 +6,7 @@ import {
   FolderOpenOutline,
 } from "@vicons/ionicons5";
 import type { TreeOption } from "naive-ui";
+import { invoke } from "@tauri-apps/api/core";
 
 /**
  * 后端 TreeNode 类型（与 Rust 后端保持一致）
@@ -87,4 +88,76 @@ export function updatePrefixWithExpanded(
         });
       break;
   }
+}
+
+/**
+ * 从指定路径加载文件树
+ */
+export async function loadFileTree(path: string): Promise<{
+  treeData: NaiveNode[];
+  error: string | null;
+  selectedPath: string;
+}> {
+  try {
+    const res = await invoke<BackendNode>("get_file_tree_from_path", { path });
+    if (!res) {
+      return {
+        treeData: [],
+        error: "后端返回空结果",
+        selectedPath: path,
+      };
+    }
+    const treeData = [mapNode(res as BackendNode)];
+    return { treeData, error: null, selectedPath: path };
+  } catch (e) {
+    console.error("调用错误", e);
+    const error = e instanceof Error ? e.message : String(e);
+    return { treeData: [], error, selectedPath: path };
+  }
+}
+
+/**
+ * 从后端拉取文件树（调用 Rust: get_file_tree）
+ */
+export async function getFileTree(): Promise<{
+  treeData: NaiveNode[];
+  error: string | null;
+  selectedPath: string | null;
+}> {
+  try {
+    const res = await invoke<BackendNode>("get_file_tree");
+    if (!res) {
+      return {
+        treeData: [],
+        error: "后端返回空结果",
+        selectedPath: null,
+      };
+    }
+    const selectedPath = (res as any).path || null;
+    const treeData = [mapNode(res as BackendNode)];
+    return { treeData, error: null, selectedPath };
+  } catch (e) {
+    console.error("调用错误", e);
+    const error = e instanceof Error ? e.message : String(e);
+    return { treeData: [], error, selectedPath: null };
+  }
+}
+
+/**
+ * 获取存储的路径
+ */
+export async function getStoredPath(): Promise<string | null> {
+  try {
+    return await invoke<string | null>("get_stored_path");
+  } catch (e) {
+    console.error("加载存储路径失败:", e);
+    return null;
+  }
+}
+
+/**
+ * 获取文件内容
+ */
+export async function getFileContent(filePath: string): Promise<string> {
+  return await invoke<string>("get_file_content", { filePath });
 }

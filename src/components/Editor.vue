@@ -20,26 +20,14 @@ import { ref, watch } from "vue";
 import { MdEditor } from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
 import { useMessage } from "naive-ui";
-import { invoke } from "@tauri-apps/api/core";
 import i18next from "i18next";
 import fm from "front-matter";
-
-function serializeFM(attrs: Record<string, any>, content: string): string {
-    const lines: string[] = ["---"];
-    for (const [key, value] of Object.entries(attrs)) {
-        if (Array.isArray(value)) {
-            lines.push(`${key}: [${(value as any[]).join(", ")}]`);
-        } else {
-            lines.push(`${key}: ${value}`);
-        }
-    }
-    lines.push("---", "");
-    return lines.join("\n") + content;
-}
+import { serializeFM } from "../utils/frontmatterUtils";
+import { handleSave } from "../utils/editorUtils";
 import FrontmatterEditor from "./FrontmatterEditor.vue";
 
 const toolbars = [
-    0, // Custom FrontmatterEditor toolbar
+    0, // 自定义 FrontmatterEditor 工具栏
     "bold",
     "underline",
     "italic",
@@ -71,7 +59,6 @@ const toolbars = [
     "previewOnly",
     // "htmlPreview",
     "catalog",
-    "github",
 ];
 const props = defineProps({
     content: String,
@@ -100,31 +87,13 @@ watch(
 const message = useMessage();
 
 /**
- * saveMarkdown:
- * - Uses the provided `props.path` as the destination file path.
- * - Calls the Tauri backend `save_markdown` command with parameters matching the Rust function signature.
- * - Throws on error so callers can show error messages.
- */
-async function saveMarkdown(content: string) {
-    if (!props.path) {
-        throw new Error(i18next.t("editor.noPath") as string);
-    }
-    try {
-        // Invoke with keys that match the Rust command signature: file_path and content
-        await invoke("save_markdown", { filePath: props.path, content });
-    } catch (e) {
-        throw e;
-    }
-}
-
-/**
  * onSave 回调：
  * - v: 原始 markdown 内容
  * - h: Promise，解析后会返回 HTML（根据 md-editor-v3 文档）
  *
  * 流程：
  * 1. （可选）等待 h（HTML 生成），但不依赖于它来决定是否保存 markdown
- * 2. 调用后端保存 markdown（save_markdown）
+ * 2. 调用后端保存 markdown（handleSave）
  * 3. 根据结果显示 success / error 提示
  */
 const onSave = async (v: any, h: any) => {
@@ -136,25 +105,23 @@ const onSave = async (v: any, h: any) => {
     }
 
     try {
-        // Optionally try to resolve HTML generation to log or detect issues (non-fatal)
+        // 可选：尝试解析 HTML 生成以记录或检测问题（非致命）
         if (h && typeof h.then === "function") {
             try {
                 const html = await h;
                 console.debug("generated html length:", html ? html.length : 0);
             } catch (htmlErr) {
                 console.warn(
-                    "HTML generation failed (will still attempt to save markdown):",
+                    "HTML 生成失败（仍将尝试保存 markdown）：",
                     htmlErr,
                 );
             }
         }
 
-        // Combine frontmatter and body into full markdown
-        const fullMarkdown = serializeFM(frontmatter.value, v);
+        // 使用提取的 handleSave 函数
+        await handleSave(v, frontmatter.value, props.path, serializeFM);
 
-        // Save full markdown content to backend
-        await saveMarkdown(fullMarkdown);
-        // Notify user of success
+        // 通知用户成功
         message.success(i18next.t("editor.saveSuccess") as string, {
             closable: true,
         });

@@ -27,7 +27,7 @@ listen<string>("change_router", (event) => {
   router.push({ path: event.payload });
 });
 
-// Initialize i18next with JSON resources from /i18n
+// 使用 /i18n 中的 JSON 资源初始化 i18next
 i18next.init({
   resources: {
     en: { translation: en },
@@ -55,10 +55,10 @@ const app = createApp(App);
 app.use(router);
 app.use(head);
 
-// expose $t to templates for convenience
+// 为模板提供 $t 以方便使用
 app.config.globalProperties.$t = (key: string, opts?: any) =>
   i18next.t(key, opts);
-// provide the i18next instance for advanced usage
+// 提供 i18next 实例以供高级使用
 app.provide("i18n", i18next);
 
 app.mount("#app");
