@@ -2,17 +2,17 @@
     <div>
         <NormalToolbar
             v-if="hasFrontmatter"
-            title="FrontMatter"
+            :title="$t('frontmatter.title')"
             @onClick="openModal"
         >
             <BookMarked class="md-editor-icon" />
-            FrontMatter
+            {{ $t("frontmatter.title") }}
         </NormalToolbar>
 
         <n-modal
             v-model:show="showModal"
             preset="card"
-            title="编辑 Frontmatter"
+            :title="$t('frontmatter.editModalTitle')"
             :width="500"
         >
             <n-spin
@@ -66,10 +66,12 @@
             </n-form>
 
             <template #action>
-                <n-button @click="saveFrontmatter" type="primary"
-                    >保存</n-button
-                >
-                <n-button @click="showModal = false">取消</n-button>
+                <n-button @click="saveFrontmatter" type="primary">{{
+                    $t("frontmatter.saveButton")
+                }}</n-button>
+                <n-button @click="showModal = false">{{
+                    $t("frontmatter.cancelButton")
+                }}</n-button>
             </template>
         </n-modal>
     </div>
@@ -77,6 +79,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from "vue";
+// import { useI18n } from "vue-i18n";
 import { NormalToolbar } from "md-editor-v3";
 import {
     NModal,

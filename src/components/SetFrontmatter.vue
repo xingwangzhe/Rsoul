@@ -1,25 +1,25 @@
 <template>
-    {{ titleText }}
+    {{ $t("frontmatter.title") }}
     <n-form
         :model="formData"
         label-placement="left"
         style="margin-bottom: 16px"
     >
-        <n-form-item :label="keyLabel" path="key">
+        <n-form-item :label="$t('frontmatter.keyLabel')" path="key">
             <n-input
                 v-model:value="formData.key"
-                :placeholder="keyPlaceholder"
+                :placeholder="$t('frontmatter.keyPlaceholder')"
             />
         </n-form-item>
-        <n-form-item :label="typeLabel" path="type">
+        <n-form-item :label="$t('frontmatter.typeLabel')" path="type">
             <n-select
                 v-model:value="formData.type"
                 :options="typeOptions"
-                :placeholder="typePlaceholder"
+                :placeholder="$t('frontmatter.typePlaceholder')"
             />
         </n-form-item>
         <n-button @click="addField" type="primary">{{
-            addButtonText
+            $t("frontmatter.addButton")
         }}</n-button>
     </n-form>
     <n-data-table :columns="columns" :data="data" />
@@ -27,34 +27,36 @@
     <n-modal
         v-model:show="showEditModal"
         preset="card"
-        :title="editModalTitle"
+        :title="$t('frontmatter.editModalTitle')"
         :width="400"
     >
         <n-form :model="editFormData" label-placement="left">
-            <n-form-item :label="keyLabel" path="key">
+            <n-form-item :label="$t('frontmatter.keyLabel')" path="key">
                 <n-input
                     v-model:value="editFormData.key"
-                    :placeholder="keyPlaceholder"
+                    :placeholder="$t('frontmatter.keyPlaceholder')"
                 />
             </n-form-item>
-            <n-form-item :label="typeLabel" path="type">
+            <n-form-item :label="$t('frontmatter.typeLabel')" path="type">
                 <n-select
                     v-model:value="editFormData.type"
                     :options="typeOptions"
-                    :placeholder="typePlaceholder"
+                    :placeholder="$t('frontmatter.typePlaceholder')"
                 />
             </n-form-item>
         </n-form>
         <template #action>
-            <n-button @click="saveEdit">{{ saveButtonText }}</n-button>
+            <n-button @click="saveEdit">{{
+                $t("frontmatter.saveButton")
+            }}</n-button>
             <n-button @click="showEditModal = false">{{
-                cancelButtonText
+                $t("frontmatter.cancelButton")
             }}</n-button>
         </template>
     </n-modal>
 </template>
 <script setup lang="ts">
-import { ref, h, onMounted, computed } from "vue";
+import { ref, h, onMounted } from "vue";
 import {
     useMessage,
     NForm,
@@ -72,22 +74,6 @@ import {
 } from "../utils/frontmatterUtils";
 
 const { t } = useI18n();
-
-// Computed properties for translations
-const titleText = computed(() => t("frontmatter.title"));
-const keyLabel = computed(() => t("frontmatter.keyLabel"));
-const keyPlaceholder = computed(() => t("frontmatter.keyPlaceholder"));
-const typeLabel = computed(() => t("frontmatter.typeLabel"));
-const typePlaceholder = computed(() => t("frontmatter.typePlaceholder"));
-const addButtonText = computed(() => t("frontmatter.addButton"));
-const editModalTitle = computed(() => t("frontmatter.editModalTitle"));
-const saveButtonText = computed(() => t("frontmatter.saveButton"));
-const cancelButtonText = computed(() => t("frontmatter.cancelButton"));
-const tableKeyTitle = computed(() => t("frontmatter.tableKey"));
-const tableTypeTitle = computed(() => t("frontmatter.tableType"));
-const tableActionsTitle = computed(() => t("frontmatter.tableActions"));
-const editButtonText = computed(() => t("frontmatter.editButton"));
-const deleteButtonText = computed(() => t("frontmatter.deleteButton"));
 
 interface RowData {
     key: number;
@@ -120,17 +106,17 @@ const typeOptions = [
 
 const data = ref<RowData[]>([]);
 
-const columns = computed(() => [
+const columns = [
     {
-        title: tableKeyTitle.value,
+        title: t("frontmatter.tableKey"),
         key: "title",
     },
     {
-        title: tableTypeTitle.value,
+        title: t("frontmatter.tableType"),
         key: "type",
     },
     {
-        title: tableActionsTitle.value,
+        title: t("frontmatter.tableActions"),
         key: "actions",
         render(row: RowData) {
             return [
@@ -141,7 +127,7 @@ const columns = computed(() => [
                         type: "primary",
                         onClick: () => editField(row.key),
                     },
-                    { default: () => editButtonText.value },
+                    { default: () => t("frontmatter.editButton") },
                 ),
                 h(
                     NButton,
@@ -151,12 +137,12 @@ const columns = computed(() => [
                         onClick: () => deleteField(row.key),
                         style: "margin-left: 8px",
                     },
-                    { default: () => deleteButtonText.value },
+                    { default: () => t("frontmatter.deleteButton") },
                 ),
             ];
         },
     },
-]);
+];
 
 const saveData = async () => {
     try {

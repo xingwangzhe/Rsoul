@@ -1,6 +1,7 @@
 mod commands;
 use commands::get_file_content::get_file_content;
 use commands::get_file_tree::{get_file_tree, get_file_tree_from_path, get_stored_path};
+use commands::lang::{get_lang, set_lang};
 use commands::save_frontmatter::{
     collect_frontmatter_suggestions, initialize_form_data, load_frontmatter,
     load_frontmatter_suggestions, save_form_data_to_frontmatter, save_frontmatter,
@@ -30,7 +31,9 @@ pub fn run() {
             initialize_form_data,
             save_form_data_to_frontmatter,
             get_theme,
-            if_change_dark
+            if_change_dark,
+            get_lang,
+            set_lang
         ])
         .setup(|app| {
             let menu = MenuBuilder::new(app)
