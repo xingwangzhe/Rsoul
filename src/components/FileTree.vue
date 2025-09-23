@@ -2,19 +2,19 @@
     <div class="file-tree-container">
         <div class="controls">
             <n-button @click="getFileTree" :loading="loading">
-                {{ $t("fileTree.addFolder") }}
+                {{ addFolderText }}
             </n-button>
             <!-- <div v-if="selectedPath" class="selected"> -->
             <!-- {{ $t("fileTree.selected", { path: selectedPath }) }} -->
         </div>
         <div v-if="error" class="error">
-            {{ $t("fileTree.error", { err: error }) }}
+            {{ t("fileTree.error", { err: error }) }}
             <!-- </div> -->
         </div>
 
         <div class="tree-area">
             <div v-if="loading" class="loading">
-                <n-spin /> {{ $t("fileTree.loading") }}
+                <n-spin /> {{ loadingText }}
             </div>
 
             <n-tree
@@ -28,17 +28,35 @@
                 style="height: 100vh"
             />
 
-            <div v-else class="empty">{{ $t("fileTree.empty") }}</div>
+            <div v-else class="empty">{{ emptyText }}</div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { NButton, NTree, NSpin } from "naive-ui";
 import type { TreeOption } from "naive-ui";
+import { useI18n } from "vue-i18n";
 
-import i18next from "i18next";
+const { t } = useI18n();
+
+// Computed properties for translations to ensure reactivity
+const addFolderText = computed(() => {
+    const text = t("fileTree.addFolder");
+    console.log("FileTree addFolderText:", text);
+    return text;
+});
+const loadingText = computed(() => {
+    const text = t("fileTree.loading");
+    console.log("FileTree loadingText:", text);
+    return text;
+});
+const emptyText = computed(() => {
+    const text = t("fileTree.empty");
+    console.log("FileTree emptyText:", text);
+    return text;
+});
 
 import {
     updatePrefixWithExpanded,
@@ -129,13 +147,11 @@ async function handleNodeClick(node: NaiveNode) {
             emit("fileSelected", { content, path: node.key });
             console.log("content:", content, " path:", node.key);
         } catch (e) {
-            console.error(
-                i18next.t("fileTree.readFileFailed", { err: String(e) }),
-                e,
-            );
-            error.value = i18next.t("fileTree.readFileFailed", {
+            const errorMessage = t("fileTree.readFileFailed", {
                 err: String(e),
-            }) as string;
+            });
+            console.error(errorMessage, e);
+            error.value = errorMessage;
         }
     }
 }

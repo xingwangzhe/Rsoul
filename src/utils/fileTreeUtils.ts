@@ -36,7 +36,7 @@ export interface NaiveNode {
 export function mapNode(b: BackendNode): NaiveNode {
   let label = b.name;
   if (!b.is_dir && b.size != null) {
-    label += ` (${formatSize(b.size)})`;
+    label += ` (t{formatSize(b.size)})`;
   }
   const node: NaiveNode = {
     label,

@@ -35,11 +35,35 @@
   "settings": {
     "language": "語言",
     "theme": "主題",
+    "themeToggle": "切換主題",
     "autoSave": "自動儲存",
     "saveInterval": "儲存間隔（秒）"
   },
   "errors": {
     "unknown": "發生未知錯誤",
     "permissionDenied": "權限被拒絕"
+  },
+  "frontmatter": {
+    "title": "設定Frontmatter格式",
+    "keyLabel": "鍵",
+    "keyPlaceholder": "輸入鍵名",
+    "typeLabel": "類型",
+    "typePlaceholder": "選擇類型",
+    "addButton": "添加",
+    "tableKey": "鍵",
+    "tableType": "類型",
+    "tableActions": "操作",
+    "editButton": "編輯",
+    "deleteButton": "刪除",
+    "saveButton": "儲存",
+    "cancelButton": "取消",
+    "editModalTitle": "編輯欄位",
+    "addSuccess": "欄位添加成功",
+    "editSuccess": "欄位編輯成功",
+    "deleteSuccess": "欄位刪除成功",
+    "saveFailed": "儲存失敗: {{error}}",
+    "loadFailed": "載入失敗: {{error}}",
+    "fillRequired": "請填寫鍵和類型",
+    "fillRequiredEdit": "請填寫鍵和類型"
   }
 }

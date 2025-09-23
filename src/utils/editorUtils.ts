@@ -1,7 +1,7 @@
 // Rsoul/src/utils/editorUtils.ts
 
 import { invoke } from "@tauri-apps/api/core";
-import i18next from "i18next";
+import { i18n } from "../i18n/index";
 
 /**
  * saveMarkdown:
@@ -14,7 +14,7 @@ export async function saveMarkdown(
   filePath: string,
 ): Promise<void> {
   if (!filePath) {
-    throw new Error(i18next.t("editor.noPath") as string);
+    throw new Error(i18n.global.t("editor.noPath"));
   }
   try {
     // 使用与 Rust 命令签名匹配的键调用：file_path 和 content

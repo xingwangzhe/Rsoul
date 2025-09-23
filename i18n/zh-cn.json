@@ -35,11 +35,35 @@
   "settings": {
     "language": "语言",
     "theme": "主题",
+    "themeToggle": "切换主题",
     "autoSave": "自动保存",
     "saveInterval": "保存间隔（秒）"
   },
   "errors": {
     "unknown": "发生未知错误",
     "permissionDenied": "权限被拒绝"
+  },
+  "frontmatter": {
+    "title": "设置Frontmatter格式",
+    "keyLabel": "键",
+    "keyPlaceholder": "输入键名",
+    "typeLabel": "类型",
+    "typePlaceholder": "选择类型",
+    "addButton": "添加",
+    "tableKey": "键",
+    "tableType": "类型",
+    "tableActions": "操作",
+    "editButton": "编辑",
+    "deleteButton": "删除",
+    "saveButton": "保存",
+    "cancelButton": "取消",
+    "editModalTitle": "编辑字段",
+    "addSuccess": "字段添加成功",
+    "editSuccess": "字段编辑成功",
+    "deleteSuccess": "字段删除成功",
+    "saveFailed": "保存失败: {{error}}",
+    "loadFailed": "加载失败: {{error}}",
+    "fillRequired": "请填写键和类型",
+    "fillRequiredEdit": "请填写键和类型"
   }
 }

@@ -35,11 +35,35 @@
   "settings": {
     "language": "Language",
     "theme": "Theme",
+    "themeToggle": "Toggle Theme",
     "autoSave": "Auto save",
     "saveInterval": "Save interval (s)"
   },
   "errors": {
     "unknown": "An unknown error occurred",
     "permissionDenied": "Permission denied"
+  },
+  "frontmatter": {
+    "title": "Set Frontmatter Format",
+    "keyLabel": "Key",
+    "keyPlaceholder": "Enter key name",
+    "typeLabel": "Type",
+    "typePlaceholder": "Select type",
+    "addButton": "Add",
+    "tableKey": "Key",
+    "tableType": "Type",
+    "tableActions": "Actions",
+    "editButton": "Edit",
+    "deleteButton": "Delete",
+    "saveButton": "Save",
+    "cancelButton": "Cancel",
+    "editModalTitle": "Edit Field",
+    "addSuccess": "Field added successfully",
+    "editSuccess": "Field edited successfully",
+    "deleteSuccess": "Field deleted successfully",
+    "saveFailed": "Save failed: {{error}}",
+    "loadFailed": "Load failed: {{error}}",
+    "fillRequired": "Please fill in key and type",
+    "fillRequiredEdit": "Please fill in key and type"
   }
 }

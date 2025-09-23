@@ -21,13 +21,15 @@ import { ref, watch, onMounted } from "vue";
 import { MdEditor } from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
 import { useMessage } from "naive-ui";
-import i18next from "i18next";
+import { useI18n } from "vue-i18n";
 import fm from "front-matter";
 import { listen } from "@tauri-apps/api/event";
 import { invoke } from "@tauri-apps/api/core";
 
 import { handleSave } from "../utils/editorUtils";
 import FrontmatterEditor from "./FrontmatterEditor.vue";
+
+const { t } = useI18n();
 
 const theme = ref<"light" | "dark">("light");
 
@@ -125,7 +127,7 @@ const onSave = async (v: any, h: any) => {
     console.debug("onSave triggered, md length:", v ? v.length : 0);
 
     if (!props.path) {
-        message.error(i18next.t("editor.noPath") as string, { closable: true });
+        message.error(t("editor.noPath"), { closable: true });
         return;
     }
 
@@ -147,15 +149,14 @@ const onSave = async (v: any, h: any) => {
         await handleSave(v, frontmatter.value, props.path);
 
         // 通知用户成功
-        message.success(i18next.t("editor.saveSuccess") as string, {
+        message.success(t("editor.saveSuccess"), {
             closable: true,
         });
     } catch (err) {
         console.error("save_markdown invoke error:", err);
-        message.error(
-            i18next.t("editor.saveFailed", { err: String(err) }) as string,
-            { closable: true },
-        );
+        message.error(t("editor.saveFailed", { err: String(err) }), {
+            closable: true,
+        });
     }
 };
 </script>

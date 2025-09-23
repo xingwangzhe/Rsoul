@@ -1,53 +1,60 @@
 <template>
-    设置Frontmatter格式
+    {{ titleText }}
     <n-form
         :model="formData"
         label-placement="left"
         style="margin-bottom: 16px"
     >
-        <n-form-item label="键" path="key">
-            <n-input v-model:value="formData.key" placeholder="输入键名" />
+        <n-form-item :label="keyLabel" path="key">
+            <n-input
+                v-model:value="formData.key"
+                :placeholder="keyPlaceholder"
+            />
         </n-form-item>
-        <n-form-item label="类型" path="type">
+        <n-form-item :label="typeLabel" path="type">
             <n-select
                 v-model:value="formData.type"
                 :options="typeOptions"
-                placeholder="选择类型"
+                :placeholder="typePlaceholder"
             />
         </n-form-item>
-        <n-button @click="addField" type="primary">添加</n-button>
+        <n-button @click="addField" type="primary">{{
+            addButtonText
+        }}</n-button>
     </n-form>
     <n-data-table :columns="columns" :data="data" />
 
     <n-modal
         v-model:show="showEditModal"
         preset="card"
-        title="编辑字段"
+        :title="editModalTitle"
         :width="400"
     >
         <n-form :model="editFormData" label-placement="left">
-            <n-form-item label="键" path="key">
+            <n-form-item :label="keyLabel" path="key">
                 <n-input
                     v-model:value="editFormData.key"
-                    placeholder="输入键名"
+                    :placeholder="keyPlaceholder"
                 />
             </n-form-item>
-            <n-form-item label="类型" path="type">
+            <n-form-item :label="typeLabel" path="type">
                 <n-select
                     v-model:value="editFormData.type"
                     :options="typeOptions"
-                    placeholder="选择类型"
+                    :placeholder="typePlaceholder"
                 />
             </n-form-item>
         </n-form>
         <template #action>
-            <n-button @click="saveEdit">保存</n-button>
-            <n-button @click="showEditModal = false">取消</n-button>
+            <n-button @click="saveEdit">{{ saveButtonText }}</n-button>
+            <n-button @click="showEditModal = false">{{
+                cancelButtonText
+            }}</n-button>
         </template>
     </n-modal>
 </template>
 <script setup lang="ts">
-import { ref, h, onMounted } from "vue";
+import { ref, h, onMounted, computed } from "vue";
 import {
     useMessage,
     NForm,
@@ -57,11 +64,30 @@ import {
     NButton,
     NModal,
 } from "naive-ui";
+import { useI18n } from "vue-i18n";
 import {
     loadFrontmatterSchema,
     saveFrontmatterFields,
     collectFrontmatterSuggestions,
 } from "../utils/frontmatterUtils";
+
+const { t } = useI18n();
+
+// Computed properties for translations
+const titleText = computed(() => t("frontmatter.title"));
+const keyLabel = computed(() => t("frontmatter.keyLabel"));
+const keyPlaceholder = computed(() => t("frontmatter.keyPlaceholder"));
+const typeLabel = computed(() => t("frontmatter.typeLabel"));
+const typePlaceholder = computed(() => t("frontmatter.typePlaceholder"));
+const addButtonText = computed(() => t("frontmatter.addButton"));
+const editModalTitle = computed(() => t("frontmatter.editModalTitle"));
+const saveButtonText = computed(() => t("frontmatter.saveButton"));
+const cancelButtonText = computed(() => t("frontmatter.cancelButton"));
+const tableKeyTitle = computed(() => t("frontmatter.tableKey"));
+const tableTypeTitle = computed(() => t("frontmatter.tableType"));
+const tableActionsTitle = computed(() => t("frontmatter.tableActions"));
+const editButtonText = computed(() => t("frontmatter.editButton"));
+const deleteButtonText = computed(() => t("frontmatter.deleteButton"));
 
 interface RowData {
     key: number;
@@ -94,17 +120,17 @@ const typeOptions = [
 
 const data = ref<RowData[]>([]);
 
-const columns = [
+const columns = computed(() => [
     {
-        title: "Key",
+        title: tableKeyTitle.value,
         key: "title",
     },
     {
-        title: "Type",
+        title: tableTypeTitle.value,
         key: "type",
     },
     {
-        title: "操作",
+        title: tableActionsTitle.value,
         key: "actions",
         render(row: RowData) {
             return [
@@ -115,7 +141,7 @@ const columns = [
                         type: "primary",
                         onClick: () => editField(row.key),
                     },
-                    { default: () => "编辑" },
+                    { default: () => editButtonText.value },
                 ),
                 h(
                     NButton,
@@ -125,12 +151,12 @@ const columns = [
                         onClick: () => deleteField(row.key),
                         style: "margin-left: 8px",
                     },
-                    { default: () => "删除" },
+                    { default: () => deleteButtonText.value },
                 ),
             ];
         },
     },
-];
+]);
 
 const saveData = async () => {
     try {
@@ -143,7 +169,9 @@ const saveData = async () => {
         // 保存字段配置后重新收集建议
         await collectFrontmatterSuggestions();
     } catch (e) {
-        message.error(`保存失败: ${e}`, { closable: true });
+        message.error(t("frontmatter.saveFailed", { error: e }), {
+            closable: true,
+        });
     }
 };
 
@@ -156,7 +184,9 @@ const loadData = async () => {
             type: item.field_type,
         }));
     } catch (e) {
-        message.error(`加载失败: ${e}`, { closable: true });
+        message.error(t("frontmatter.loadFailed", { error: e }), {
+            closable: true,
+        });
     }
 };
 
@@ -166,7 +196,7 @@ onMounted(() => {
 
 const addField = async () => {
     if (!formData.value.key || !formData.value.type) {
-        message.warning("请填写键和类型", { closable: true });
+        message.warning(t("frontmatter.fillRequired"), { closable: true });
         return;
     }
     const newKey = data.value.length;
@@ -177,7 +207,7 @@ const addField = async () => {
     });
     formData.value.key = "";
     formData.value.type = "";
-    message.success("字段添加成功", { closable: true });
+    message.success(t("frontmatter.addSuccess"), { closable: true });
     await saveData();
 };
 
@@ -192,7 +222,7 @@ const editField = (index: number) => {
 
 const saveEdit = async () => {
     if (!editFormData.value.key || !editFormData.value.type) {
-        message.warning("请填写键和类型", { closable: true });
+        message.warning(t("frontmatter.fillRequiredEdit"), { closable: true });
         return;
     }
     const index = data.value.findIndex(
@@ -201,7 +231,7 @@ const saveEdit = async () => {
     if (index !== -1) {
         data.value[index].title = editFormData.value.key;
         data.value[index].type = editFormData.value.type;
-        message.success("字段编辑成功", { closable: true });
+        message.success(t("frontmatter.editSuccess"), { closable: true });
         await saveData();
     }
     showEditModal.value = false;
@@ -211,7 +241,7 @@ const deleteField = async (index: number) => {
     const idx = data.value.findIndex((item) => item.key === index);
     if (idx !== -1) {
         data.value.splice(idx, 1);
-        message.success("字段删除成功", { closable: true });
+        message.success(t("frontmatter.deleteSuccess"), { closable: true });
         await saveData();
     }
 };

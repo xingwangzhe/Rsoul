@@ -1,74 +1,78 @@
 <template>
-    <NormalToolbar
-        v-if="hasFrontmatter"
-        title="FrontMatter"
-        @onClick="openModal"
-    >
-        <BookMarked class="md-editor-icon" />
-        FrontMatter
-    </NormalToolbar>
+    <div>
+        <NormalToolbar
+            v-if="hasFrontmatter"
+            title="FrontMatter"
+            @onClick="openModal"
+        >
+            <BookMarked class="md-editor-icon" />
+            FrontMatter
+        </NormalToolbar>
 
-    <n-modal
-        v-model:show="showModal"
-        preset="card"
-        title="编辑 Frontmatter"
-        :width="500"
-    >
-        <n-spin
-            v-if="loading"
-            size="large"
-            style="display: flex; justify-content: center; padding: 24px"
-        />
+        <n-modal
+            v-model:show="showModal"
+            preset="card"
+            title="编辑 Frontmatter"
+            :width="500"
+        >
+            <n-spin
+                v-if="loading"
+                size="large"
+                style="display: flex; justify-content: center; padding: 24px"
+            />
 
-        <n-form v-else :model="formData" label-placement="left">
-            <n-form-item
-                v-for="field in schema"
-                :key="field.key"
-                :label="field.title"
-                :path="field.title"
-            >
-                <n-select
-                    v-if="field.field_type === 'string'"
-                    v-model:value="formData[field.title]"
-                    :options="getOptionsForField(field)"
-                    placeholder="选择或输入值"
-                    filterable
-                    clearable
-                    allow-create
-                />
-                <n-select
-                    v-else-if="field.field_type === 'string[]'"
-                    v-model:value="formData[field.title]"
-                    :options="getOptionsForField(field)"
-                    placeholder="选择或输入标签"
-                    filterable
-                    multiple
-                    clearable
-                    allow-create
-                    tag
-                />
-                <n-date-picker
-                    v-else-if="field.field_type === 'date'"
-                    v-model:value="formData[field.title]"
-                    type="date"
-                />
-                <n-time-picker
-                    v-else-if="field.field_type === 'time'"
-                    v-model:value="formData[field.title]"
-                />
-                <n-date-picker
-                    v-else-if="field.field_type === 'dateandtime'"
-                    v-model:value="formData[field.title]"
-                    type="datetime"
-                />
-            </n-form-item>
-        </n-form>
+            <n-form v-else :model="formData" label-placement="left">
+                <n-form-item
+                    v-for="field in schema"
+                    :key="field.key"
+                    :label="field.title"
+                    :path="field.title"
+                >
+                    <n-select
+                        v-if="field.field_type === 'string'"
+                        v-model:value="formData[field.title]"
+                        :options="getOptionsForField(field)"
+                        placeholder="选择或输入值"
+                        filterable
+                        clearable
+                        allow-create
+                    />
+                    <n-select
+                        v-else-if="field.field_type === 'string[]'"
+                        v-model:value="formData[field.title]"
+                        :options="getOptionsForField(field)"
+                        placeholder="选择或输入标签"
+                        filterable
+                        multiple
+                        clearable
+                        allow-create
+                        tag
+                    />
+                    <n-date-picker
+                        v-else-if="field.field_type === 'date'"
+                        v-model:value="formData[field.title]"
+                        type="date"
+                    />
+                    <n-time-picker
+                        v-else-if="field.field_type === 'time'"
+                        v-model:value="formData[field.title]"
+                    />
+                    <n-date-picker
+                        v-else-if="field.field_type === 'dateandtime'"
+                        v-model:value="formData[field.title]"
+                        type="datetime"
+                    />
+                </n-form-item>
+            </n-form>
 
-        <template #action>
-            <n-button @click="saveFrontmatter" type="primary">保存</n-button>
-            <n-button @click="showModal = false">取消</n-button>
-        </template>
-    </n-modal>
+            <template #action>
+                <n-button @click="saveFrontmatter" type="primary"
+                    >保存</n-button
+                >
+                <n-button @click="showModal = false">取消</n-button>
+            </template>
+        </n-modal>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -93,6 +97,11 @@ import {
     saveFormDataToFrontmatter,
     getFieldOptions,
 } from "../utils/frontmatterUtils";
+
+// Prevent Vue from passing extraneous attributes to the root element
+defineOptions({
+    inheritAttrs: false,
+});
 
 // 接收父组件传入的已解析 frontmatter 对象
 const props = defineProps<{
