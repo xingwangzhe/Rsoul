@@ -11,7 +11,6 @@ declare module 'vue' {
     Editor: typeof import('./src/components/Editor.vue')['default']
     FileTree: typeof import('./src/components/FileTree.vue')['default']
     FrontmatterEditor: typeof import('./src/components/FrontmatterEditor.vue')['default']
-    NConfigProvider: typeof import('naive-ui')['NConfigProvider']
     NDataTable: typeof import('naive-ui')['NDataTable']
     NFlex: typeof import('naive-ui')['NFlex']
     NGlobalStyle: typeof import('naive-ui')['NGlobalStyle']
