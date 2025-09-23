@@ -2,7 +2,6 @@ use serde::{Deserialize, Serialize};
 use serde_json;
 use std::collections::HashMap;
 use std::fs;
-use tauri::command;
 use tauri_plugin_store::StoreExt;
 use walkdir::WalkDir;
 

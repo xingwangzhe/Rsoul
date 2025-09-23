@@ -6,20 +6,17 @@
 
 .controls {
     padding: var(--padding-small);
-    border-bottom: 1px solid var(--border-color);
     flex-shrink: 0;
 }
 
 .selected {
     margin-top: 4px;
     font-size: 14px;
-    color: var(--text-color);
 }
 
 .error {
     margin-top: 4px;
     font-size: 14px;
-    color: var(--error-color);
 }
 
 .tree-area {
@@ -32,11 +29,6 @@
     display: flex;
     gap: var(--padding-small);
     align-items: center;
-    color: var(--text-muted);
-}
-
-.empty {
-    color: var(--text-muted);
 }
 
 .n-tree {

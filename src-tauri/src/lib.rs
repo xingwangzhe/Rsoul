@@ -6,6 +6,7 @@ use commands::save_frontmatter::{
     load_frontmatter_suggestions, save_form_data_to_frontmatter, save_frontmatter,
 };
 use commands::save_markdown::{save_markdown, save_markdown_with_frontmatter};
+use commands::theme::{get_theme, if_change_dark};
 use tauri::menu::MenuBuilder;
 use tauri::Emitter;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -27,7 +28,9 @@ pub fn run() {
             collect_frontmatter_suggestions,
             load_frontmatter_suggestions,
             initialize_form_data,
-            save_form_data_to_frontmatter
+            save_form_data_to_frontmatter,
+            get_theme,
+            if_change_dark
         ])
         .setup(|app| {
             let menu = MenuBuilder::new(app)

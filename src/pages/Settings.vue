@@ -10,4 +10,4 @@ import SwitchDark from "../components/SwitchDark.vue";
 import SetFrontmatter from "../components/SetFrontmatter.vue";
 </script>
 
-<style src="./css/Settings.css" scoped></style>
+<style src="../css/Settings.css" scoped></style>

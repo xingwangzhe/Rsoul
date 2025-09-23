@@ -141,4 +141,4 @@ async function handleNodeClick(node: NaiveNode) {
 }
 </script>
 
-<style src="./css/FileTree.css" scoped></style>
+<style src="../css/FileTree.css"></style>

@@ -223,4 +223,4 @@ async function saveFrontmatter() {
 }
 </script>
 
-<style src="./css/FrontmatterEditor.css" scoped></style>
+<style src="../css/FrontmatterEditor.css"></style>

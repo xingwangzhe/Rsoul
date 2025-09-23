@@ -1,13 +1,13 @@
 <template>
     <n-message-provider>
-        <div id="main-container">
+        <n-flex id="main-container">
             <div id="left-dir">
                 <FileTree @file-selected="handleFileSelected" />
             </div>
             <div id="right-editor">
                 <Editor :content="selectedContent" :path="selectedPath" />
             </div>
-        </div>
+        </n-flex>
     </n-message-provider>
 </template>
 
@@ -37,4 +37,4 @@ function handleFileSelected(payload) {
 }
 </script>
 
-<style src="./css/Home.css" scoped></style>
+<style src="../css/Home.css" scoped></style>

@@ -1,6 +1,6 @@
 <template>
     切换亮暗主题
-    <n-switch v-model:value="isDark" size="large">
+    <n-switch :value="isDark" @update:value="toggleTheme" size="large">
         <template #checked-icon>
             <n-icon :component="MoonSharp" />
         </template>
@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import { NSwitch, NIcon } from "naive-ui";
 import { SunnySharp, MoonSharp } from "@vicons/ionicons5";
-import { ref } from "vue";
+import { useTheme } from "../utils/useTheme.ts";
 
-const isDark = ref(false);
+const { isDark, toggleTheme } = useTheme();
 </script>
