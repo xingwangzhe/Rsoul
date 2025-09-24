@@ -1,6 +1,10 @@
 <template>
     <n-message-provider>
-        <n-flex id="main-container">
+        <n-flex
+            id="main-container"
+            vertical="false"
+            style="flex-direction: row"
+        >
             <div id="left-dir">
                 <FileTree @file-selected="handleFileSelected" />
             </div>

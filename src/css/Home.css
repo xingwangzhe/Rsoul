@@ -1,5 +1,6 @@
 #main-container {
     display: flex;
+    flex-direction: row;
 
     & #left-dir {
         width: 300px;
@@ -10,7 +11,7 @@
     }
 
     & #right-editor {
-        width: 100vh;
+        width: 100%;
         height: var(--full-height);
         flex: 8;
     }
