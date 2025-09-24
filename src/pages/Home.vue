@@ -24,32 +24,20 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { defineAsyncComponent } from "vue";
 import { NMessageProvider, NButton, useMessage } from "naive-ui";
-import FileTree from "../components/FileTree.vue";
-import Editor from "../components/Editor.vue";
 import { invoke } from "@tauri-apps/api/core";
 import { getStoredPath } from "../utils/fileTreeUtils";
+import { useFileSelection } from "../utils/useFileSelection";
 
-const selectedContent = ref("");
-const selectedPath = ref("");
+const FileTree = defineAsyncComponent(
+    () => import("../components/FileTree.vue"),
+);
+const Editor = defineAsyncComponent(() => import("../components/Editor.vue"));
+
+const { selectedContent, selectedPath, handleFileSelected } =
+    useFileSelection();
 const msg = useMessage();
-
-/**
- * FileTree 现在发出一个对象：{ content, path }
- * 当选择文件时，同时更新 selectedContent 和 selectedPath。
- */
-function handleFileSelected(payload) {
-    if (!payload) return;
-    // payload 可能是内容字符串（遗留）或对象 { content, path }
-    if (typeof payload === "string") {
-        selectedContent.value = payload;
-        // 在此遗留情况下保持 selectedPath 不变
-    } else {
-        selectedContent.value = payload.content ?? "";
-        selectedPath.value = payload.path ?? "";
-    }
-}
 
 async function openTerminal() {
     try {
