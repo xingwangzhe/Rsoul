@@ -65,5 +65,19 @@
     "loadFailed": "Load failed: {{error}}",
     "fillRequired": "Please fill in key and type",
     "fillRequiredEdit": "Please fill in key and type"
+  },
+  "about": {
+    "title": "About Rsoul",
+    "subtitle": "A lightweight Markdown editor focused on frontmatter",
+    "descriptionLine1": "Rsoul is a focused Markdown editor designed for efficient editing of Markdown files and their frontmatter metadata. It provides a clean editing surface, frontmatter management, and quick file operations.",
+    "descriptionLine2": "Core features emphasize frontmatter schema configuration, easy insertion and validation of metadata fields, and a seamless editing workflow for content creators and developers.",
+    "author": "Author:",
+    "github": "Repository:",
+    "license": "License:",
+    "licenseName": "MIT",
+    "open_github": "Open GitHub",
+    "copy_link": "Copy Link",
+    "toggle_theme": "Toggle Theme",
+    "footerNote": "Built as a Markdown-focused toolkit with first-class frontmatter support."
   }
 }

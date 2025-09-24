@@ -44,7 +44,7 @@
     "permissionDenied": "权限被拒绝"
   },
   "frontmatter": {
-    "title": "设置Frontmatter格式",
+    "title": "设置 Frontmatter 格式",
     "keyLabel": "键",
     "keyPlaceholder": "输入键名",
     "typeLabel": "类型",
@@ -65,5 +65,19 @@
     "loadFailed": "加载失败: {{error}}",
     "fillRequired": "请填写键和类型",
     "fillRequiredEdit": "请填写键和类型"
+  },
+  "about": {
+    "title": "关于 Rsoul",
+    "subtitle": "一个专注于 Frontmatter 的轻量级 Markdown 编辑器",
+    "descriptionLine1": "Rsoul 是一款轻量的 Markdown 编辑器，专注于 Markdown 文件的 frontmatter 元数据管理与编辑，旨在提高写作和内容管理的效率。",
+    "descriptionLine2": "主要功能包括文件树浏览、Markdown 编辑区、以及强大的 frontmatter 配置与校验工具，方便添加、编辑、验证并保存文档元数据，适合内容创作者与开发者使用。",
+    "author": "作者：",
+    "github": "仓库：",
+    "license": "许可证：",
+    "licenseName": "MIT",
+    "open_github": "打开 GitHub",
+    "copy_link": "复制链接",
+    "toggle_theme": "切换主题",
+    "footerNote": "作为一款以 frontmatter 为核心的 Markdown 工具构建，欢迎在 GitHub 上贡献与反馈。"
   }
 }
