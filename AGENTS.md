@@ -1,5 +1,60 @@
 # Rsoul
 
+## IMPORTANT: Tauri API import (CRITICAL)
+
+When calling Tauri commands from the frontend, always import `invoke` from the new `@tauri-apps/api/core` package. Do NOT use the legacy import from `@tauri-apps/api/tauri` — that is deprecated in recent Tauri versions and will cause runtime errors.
+
+Correct:
+
+```/dev/null/tauri-invoke.example#L1-3
+import { invoke } from '@tauri-apps/api/core'
+```
+
+Incorrect (old/legacy):
+
+```/dev/null/tauri-invoke-wrong.example#L1-2
+import { invoke } from '@tauri-apps/api/tauri'
+```
+
+I have updated frontend components in the project to use `@tauri-apps/api/core` where applicable (for example, the interactive terminal component now imports `invoke` from `@tauri-apps/api/core`).
+
+## NOTE: Vue template / import mistakes ("<context>")
+
+You may encounter an incorrect import or usage that looks like `<context>` in templates or `import { context } from 'vue'` in scripts. Vue does not provide a `<context>` component or a named export `context` from the core package. If you see such usage, replace it with the appropriate Composition API utilities:
+
+- To access the current component instance and its context, use `getCurrentInstance()` from Vue.
+- To provide/inject values across component boundaries use `provide()` / `inject()`.
+- For reactive state and lifecycle hooks use `ref`, `reactive`, `onMounted`, etc.
+
+Examples (correct patterns):
+
+Access instance (if you truly need instance internals):
+
+```/dev/null/vue-getCurrentInstance.example#L1-3
+import { getCurrentInstance } from 'vue'
+const instance = getCurrentInstance()
+```
+
+Provide / inject:
+
+```/dev/null/vue-provide-inject.example#L1-4
+// Provider
+import { provide } from 'vue'
+provide('key', someValue)
+
+// Consumer
+import { inject } from 'vue'
+const value = inject('key')
+```
+
+If you find a stray `<context>` tag in a template, remove it — it's not a standard Vue component. If a third-party library documented a `<context>` usage, consult that library's docs for the correct component name or API.
+
+## NOTE: Development Workflow
+
+千万不要使用build方法来检查错误，这样会浪费时间。Always use `bun run tauri dev` for development and testing, as building takes significantly longer and is only needed for production releases.
+
+---
+
 ## Overview
 
 Rsoul is a modern Markdown editor built with Tauri, Vue 3, and Naive UI. It provides a seamless editing experience for Markdown files with advanced features like Frontmatter editing, file tree navigation, and real-time preview. The application is designed for developers and writers who need a powerful yet lightweight editor for managing Markdown content.

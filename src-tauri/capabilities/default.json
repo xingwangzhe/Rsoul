@@ -10,6 +10,7 @@
     "opener:allow-open-url",
     "fs:default",
     "dialog:default",
-    "store:default"
+    "store:default",
+    "shell:default"
   ]
 }

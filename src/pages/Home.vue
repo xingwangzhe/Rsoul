@@ -8,17 +8,28 @@
                 <Editor :content="selectedContent" :path="selectedPath" />
             </div>
         </n-flex>
+        <n-button
+            size="small"
+            type="primary"
+            @click="openTerminal"
+            style="position: fixed; left: 20px; bottom: 20px; z-index: 1200"
+        >
+            Open Terminal
+        </n-button>
     </n-message-provider>
 </template>
 
 <script setup>
 import { ref } from "vue";
-import { NMessageProvider } from "naive-ui";
+import { NMessageProvider, NButton, useMessage } from "naive-ui";
 import FileTree from "../components/FileTree.vue";
 import Editor from "../components/Editor.vue";
+import { invoke } from "@tauri-apps/api/core";
+import { getStoredPath } from "../utils/fileTreeUtils";
 
 const selectedContent = ref("");
 const selectedPath = ref("");
+const msg = useMessage();
 
 /**
  * FileTree 现在发出一个对象：{ content, path }
@@ -33,6 +44,19 @@ function handleFileSelected(payload) {
     } else {
         selectedContent.value = payload.content ?? "";
         selectedPath.value = payload.path ?? "";
+    }
+}
+
+async function openTerminal() {
+    try {
+        const path = await getStoredPath();
+        if (path) {
+            await invoke("open_terminal", { path });
+        } else {
+            msg.warning("No folder selected");
+        }
+    } catch (e) {
+        msg.error(String(e));
     }
 }
 </script>

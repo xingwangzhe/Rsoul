@@ -2,6 +2,7 @@ mod commands;
 use commands::get_file_content::get_file_content;
 use commands::get_file_tree::{get_file_tree, get_file_tree_from_path, get_stored_path};
 use commands::lang::{get_lang, set_lang};
+use commands::open_terminal::open_terminal;
 use commands::save_frontmatter::{
     collect_frontmatter_suggestions, initialize_form_data, load_frontmatter,
     load_frontmatter_suggestions, save_form_data_to_frontmatter, save_frontmatter,
@@ -17,6 +18,7 @@ pub fn run() {
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_shell::init())
         .invoke_handler(tauri::generate_handler![
             get_file_tree,
             get_file_tree_from_path,
@@ -30,6 +32,7 @@ pub fn run() {
             load_frontmatter_suggestions,
             initialize_form_data,
             save_form_data_to_frontmatter,
+            open_terminal,
             get_theme,
             if_change_dark,
             get_lang,
