@@ -1,9 +1,9 @@
-// Rsoul/src/utils/frontmatterUtils.ts
+// Rsoul/src/utils/frontmatterUtils.ts - Frontmatter工具函数
 
 import { invoke } from "@tauri-apps/api/core";
 
 /**
- * 加载 frontmatter schema
+ * 加载frontmatter字段定义schema
  */
 export async function loadFrontmatterSchema(): Promise<
   Array<{ key: number; title: string; field_type: string }>
@@ -22,7 +22,7 @@ export async function loadFrontmatterSchema(): Promise<
 }
 
 /**
- * 加载 frontmatter suggestions
+ * 加载frontmatter字段值建议
  */
 export async function loadFrontmatterSuggestions(): Promise<
   Record<string, Array<{ value: string; count: number }>>
@@ -34,14 +34,14 @@ export async function loadFrontmatterSuggestions(): Promise<
 }
 
 /**
- * 收集 frontmatter suggestions
+ * 收集frontmatter字段值建议
  */
 export async function collectFrontmatterSuggestions(): Promise<void> {
   await invoke("collect_frontmatter_suggestions");
 }
 
 /**
- * 保存 frontmatter 字段
+ * 保存frontmatter字段定义
  */
 export async function saveFrontmatterFields(
   fields: Array<{ key: number; title: string; field_type: string }>,
@@ -50,7 +50,7 @@ export async function saveFrontmatterFields(
 }
 
 /**
- * 初始化表单数据（后端处理）
+ * 初始化表单数据（由后端处理类型转换）
  */
 export async function initializeFormData(
   schema: Array<{ key: number; title: string; field_type: string }>,
@@ -64,7 +64,7 @@ export async function initializeFormData(
 }
 
 /**
- * 保存表单数据到 frontmatter（后端处理）
+ * 保存表单数据到frontmatter（由后端处理类型转换）
  */
 export async function saveFormDataToFrontmatter(
   schema: Array<{ key: number; title: string; field_type: string }>,
@@ -78,7 +78,7 @@ export async function saveFormDataToFrontmatter(
 }
 
 /**
- * 获取字段的建议选项，用于 string 和 string[] 字段
+ * 获取字段的建议选项，用于string和string[]类型的字段
  */
 export function getFieldOptions(
   fieldTitle: string,

@@ -52,7 +52,7 @@ export function useLanguage() {
         selectedLanguage.value = locale.value;
       }
     } catch (error) {
-      console.error("Failed to get language:", error);
+      console.error("获取语言设置失败:", error);
       selectedLanguage.value = locale.value;
     }
   };

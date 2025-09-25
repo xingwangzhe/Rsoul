@@ -7,16 +7,16 @@ const isDark = ref(false);
 async function loadTheme() {
   try {
     const theme = await invoke<boolean>("get_theme");
-    console.log("Loading theme:", theme);
+    console.log("正在加载主题:", theme);
     isDark.value = theme;
   } catch (err) {
-    console.error("Failed to load theme:", err);
+    console.error("加载主题失败:", err);
     isDark.value = false;
   }
 }
 
 listen<boolean>("theme_changed", (event) => {
-  console.log("Theme changed to:", event.payload);
+  console.log("主题已更改为:", event.payload);
   isDark.value = event.payload;
 });
 

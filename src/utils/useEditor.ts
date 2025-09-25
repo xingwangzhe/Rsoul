@@ -43,7 +43,7 @@ export function useEditor(props: EditorProps) {
       const isDark = await invoke<boolean>("get_theme");
       theme.value = isDark ? "dark" : "light";
     } catch (err) {
-      console.error("Failed to load theme:", err);
+      console.error("加载主题失败:", err);
       theme.value = "light";
     }
   };
@@ -109,7 +109,7 @@ export function useEditor(props: EditorProps) {
   );
 
   const onSave = async (v: any, h: any) => {
-    console.debug("onSave triggered, md length:", v ? v.length : 0);
+    console.debug("onSave触发，markdown长度:", v ? v.length : 0);
 
     if (!props.path) {
       message.error(t("editor.noPath"), { closable: true });
@@ -120,9 +120,9 @@ export function useEditor(props: EditorProps) {
       if (h && typeof h.then === "function") {
         try {
           const html = await h;
-          console.debug("generated html length:", html ? html.length : 0);
+          console.debug("生成的HTML长度:", html ? html.length : 0);
         } catch (htmlErr) {
-          console.warn("HTML 生成失败（仍将尝试保存 markdown）：", htmlErr);
+          console.warn("HTML生成失败（仍将尝试保存markdown）：", htmlErr);
         }
       }
 
@@ -132,7 +132,7 @@ export function useEditor(props: EditorProps) {
         closable: true,
       });
     } catch (err) {
-      console.error("save_markdown invoke error:", err);
+      console.error("save_markdown调用错误:", err);
       message.error(t("editor.saveFailed", { err: String(err) }), {
         closable: true,
       });

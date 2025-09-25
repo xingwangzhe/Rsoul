@@ -46,7 +46,7 @@ export function useFileTree(emit: any) {
       try {
         await collectFrontmatterSuggestions();
       } catch (e) {
-        console.warn("收集 frontmatter 建议失败:", e);
+        console.warn("收集frontmatter字段值建议失败:", e);
       }
     }
   };
@@ -58,7 +58,7 @@ export function useFileTree(emit: any) {
       try {
         await collectFrontmatterSuggestions();
       } catch (e) {
-        console.warn("收集 frontmatter 建议失败:", e);
+        console.warn("收集frontmatter字段值建议失败:", e);
       }
     }
   });

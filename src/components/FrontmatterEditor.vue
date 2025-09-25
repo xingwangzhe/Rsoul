@@ -101,7 +101,7 @@ import {
     getFieldOptions,
 } from "../utils/frontmatterUtils";
 
-// Prevent Vue from passing extraneous attributes to the root element
+// 防止Vue将额外属性传递给根元素
 defineOptions({
     inheritAttrs: false,
 });
@@ -116,7 +116,7 @@ const emit = defineEmits<{
     (e: "updateFrontmatter", payload: Record<string, any>): void;
 }>();
 
-// Only allow opening when frontmatter data is available (i.e., a markdown file is selected)
+// 仅在frontmatter数据可用时允许打开（即选择了markdown文件时）
 const hasFrontmatter = computed(
     () =>
         !!props.currentFrontmatter &&
@@ -133,7 +133,7 @@ const schema = ref<Array<{ key: number; title: string; field_type: string }>>(
 );
 // 表单数据
 const formData = ref<Record<string, any>>({});
-// Frontmatter suggestions from backend
+// 来自后端的Frontmatter建议
 const suggestions = ref<
     Record<string, Array<{ value: string; count: number }>>
 >({});
@@ -148,19 +148,19 @@ async function openModal() {
     showModal.value = true;
     loading.value = true;
     try {
-        // Load schema
+        // 加载schema
         if (schema.value.length === 0) {
             schema.value = await loadFrontmatterSchema();
         }
         console.log("加载的 schema:", schema.value);
 
-        // Load or collect suggestions
+        // 加载或收集建议
         let loadedSuggestions = await loadFrontmatterSuggestions();
         console.log("初始加载的 suggestions:", loadedSuggestions);
 
         if (Object.keys(loadedSuggestions).length === 0) {
             console.log("没有找到 suggestions，开始收集...");
-            // No suggestions, collect them
+            // 没有建议，收集它们
             await collectFrontmatterSuggestions();
             loadedSuggestions = await loadFrontmatterSuggestions();
             console.log("收集后的 suggestions:", loadedSuggestions);

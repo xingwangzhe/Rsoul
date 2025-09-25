@@ -94,21 +94,21 @@ import {
 import { openUrl } from "@tauri-apps/plugin-opener";
 
 /**
- * Use global i18n keys from Rsoul/i18n/*.json
- * This component uses the global composer from vue-i18n.
+ * 使用来自 Rsoul/i18n/*.json 的全局 i18n 键
+ * 此组件使用 vue-i18n 的全局 composer。
  */
 const { t, locale } = useI18n();
 
-// reflect locale in a local ref for select binding
+// 在本地 ref 中反映 locale 用于 select 绑定
 const currentLocale = ref(locale.value || "en");
 
-// keep global locale in sync when select changes
+// 当 select 更改时保持全局 locale 同步
 function onLocaleChange(val) {
     locale.value = val || "en";
     currentLocale.value = locale.value;
 }
 
-// if the global locale was changed elsewhere, keep select synced
+// 如果全局 locale 在其他地方被更改，保持 select 同步
 watch(
     () => locale.value,
     (v) => {
@@ -130,12 +130,12 @@ const message = useMessage();
 
 async function openGithub() {
     try {
-        // Use Tauri plugin-opener's openUrl to open the URL via the OS
+        // 使用 Tauri plugin-opener 的 openUrl 通过操作系统打开 URL
         await openUrl(githubUrl);
     } catch (e) {
-        // Do not use any DOM open fallback. Report error via UI and console.
-        message.error(t("errors.unknown") || "Open failed");
-        console.error("Failed to open URL via plugin-opener openUrl:", e);
+        // 不要使用任何 DOM 打开回退。通过 UI 和 console 报告错误。
+        message.error(t("errors.unknown") || "打开失败");
+        console.error("通过 plugin-opener openUrl 打开 URL 失败:", e);
     }
 }
 
@@ -144,7 +144,7 @@ async function copyGithub() {
         await navigator.clipboard.writeText(githubUrl);
         message.success(t("about.copy_link") + " ✓");
     } catch (e) {
-        message.error(t("errors.unknown") || "Copy failed");
+        message.error(t("errors.unknown") || "复制失败");
     }
 }
 </script>

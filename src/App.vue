@@ -16,13 +16,11 @@ import { onMounted } from "vue";
 import { NConfigProvider, NMessageProvider, darkTheme } from "naive-ui";
 import { useTheme } from "./utils/useTheme";
 
-
 const { isDark, loadTheme } = useTheme();
 
 onMounted(async () => {
     await loadTheme();
 });
-
 </script>
 
 <style></style>
