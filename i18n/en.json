@@ -3,6 +3,27 @@
     "greeting": "Hello",
     "title": "Rsoul"
   },
+  "contextMenu": {
+    "newFile": "New File",
+    "newFolder": "New Folder",
+    "rename": "Rename",
+    "delete": "Delete",
+
+    "enterFileName": "Enter file name:",
+    "enterFolderName": "Enter folder name:",
+    "enterNewName": "Enter new name:",
+
+    "fileCreated": "File created successfully",
+    "folderCreated": "Folder created successfully",
+    "renameSuccess": "Renamed successfully",
+    "deleteSuccess": "Deleted successfully",
+    "createFailed": "Create failed",
+    "renameFailed": "Rename failed",
+    "deleteFailed": "Delete failed",
+
+    "confirmDeleteFile": "Are you sure you want to delete this file?",
+    "confirmDeleteFolder": "Are you sure you want to delete this folder?"
+  },
   "nav": {
     "home": "Home",
     "about": "About",

@@ -2,7 +2,7 @@
     <n-message-provider>
         <n-flex
             id="main-container"
-            vertical="false"
+            :vertical="false"
             style="flex-direction: row"
         >
             <div id="left-dir">

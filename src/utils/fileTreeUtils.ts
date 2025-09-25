@@ -129,7 +129,20 @@ export async function getFileTree(): Promise<{
         selectedPath: null,
       };
     }
-    const selectedPath = (res as any).path || null;
+
+    // backend may or may not return a stored path; prefer backend path but fall back to stored path
+    let selectedPath = (res as any).path || null;
+    if (!selectedPath) {
+      try {
+        const stored = await getStoredPath();
+        if (stored) {
+          selectedPath = stored;
+        }
+      } catch (err) {
+        console.warn("Failed to get stored path fallback:", err);
+      }
+    }
+
     const treeData = [mapNode(res as BackendNode)];
     return { treeData, error: null, selectedPath };
   } catch (e) {

@@ -37,12 +37,28 @@ export function useFileTree(emit: any) {
     selectedPath.value = null;
 
     const result = await getFileTreeFromBackend();
-    treeData.value = result.treeData;
-    error.value = result.error;
-    selectedPath.value = result.selectedPath;
+
+    // 如果后端返回了已存储的 selectedPath，优先使用该路径重新加载文件树，
+    // 以确保前端的树与存储路径保持一致（例如用户通过系统对话框选择了文件夹）。
+    if (result.selectedPath) {
+      try {
+        await loadFileTreeWrapper(result.selectedPath);
+      } catch (e) {
+        console.warn("加载存储路径对应的文件树失败:", e);
+        // 回退到后端返回的结果
+        treeData.value = result.treeData;
+        error.value = result.error;
+        selectedPath.value = result.selectedPath;
+      }
+    } else {
+      treeData.value = result.treeData;
+      error.value = result.error;
+      selectedPath.value = result.selectedPath;
+    }
+
     loading.value = false;
 
-    if (result.treeData.length > 0) {
+    if (treeData.value.length > 0) {
       try {
         await collectFrontmatterSuggestions();
       } catch (e) {

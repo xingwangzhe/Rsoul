@@ -3,6 +3,24 @@
     "greeting": "你好",
     "title": "Rsoul"
   },
+  "contextMenu": {
+    "newFile": "新建文件",
+    "newFolder": "新建文件夹",
+    "rename": "重命名",
+    "delete": "删除",
+    "enterFileName": "输入文件名：",
+    "enterFolderName": "输入文件夹名：",
+    "enterNewName": "输入新名称：",
+    "fileCreated": "文件创建成功",
+    "folderCreated": "文件夹创建成功",
+    "renameSuccess": "重命名成功",
+    "deleteSuccess": "删除成功",
+    "createFailed": "创建失败",
+    "renameFailed": "重命名失败",
+    "deleteFailed": "删除失败",
+    "confirmDeleteFile": "确定要删除此文件吗？",
+    "confirmDeleteFolder": "确定要删除此文件夹吗？"
+  },
   "nav": {
     "home": "首页",
     "about": "关于",
