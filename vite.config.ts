@@ -8,7 +8,7 @@ import { NaiveUiResolver } from "unplugin-vue-components/resolvers";
 const host = process.env.TAURI_DEV_HOST;
 
 // https://vite.dev/config/
-export default defineConfig(async () => ({
+export default defineConfig({
   plugins: [
     vue(),
     Components({ resolvers: [NaiveUiResolver()] }),
@@ -16,10 +16,7 @@ export default defineConfig(async () => ({
   ],
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
-  //
-  // 1. prevent Vite from obscuring rust errors
   clearScreen: false,
-  // 2. tauri expects a fixed port, fail if that port is not available
   server: {
     port: 1420,
     strictPort: true,
@@ -32,8 +29,34 @@ export default defineConfig(async () => ({
         }
       : undefined,
     watch: {
-      // 3. tell Vite to ignore watching `src-tauri`
       ignored: ["**/src-tauri/**"],
     },
   },
-}));
+
+  // Optimized build config for better performance
+  build: {
+    sourcemap: false,
+    minify: 'esbuild',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Separate large dependencies into chunks
+          'codemirror-core': ['@codemirror/state', '@codemirror/view', '@codemirror/commands'],
+          'codemirror-languages': [
+            '@codemirror/lang-javascript',
+            '@codemirror/lang-css',
+            '@codemirror/lang-html',
+            '@codemirror/lang-json',
+            '@codemirror/lang-markdown',
+            '@codemirror/lang-python',
+            '@codemirror/lang-xml',
+          ],
+          'naive-ui-core': ['naive-ui'],
+          'vue-vendor': ['vue', 'vue-router', 'vue-i18n'],
+          'tauri-vendor': ['@tauri-apps/api'],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 1000,
+  },
+});

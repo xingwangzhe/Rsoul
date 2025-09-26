@@ -128,7 +128,7 @@ const showModal = ref(false);
 // 加载 schema 指示
 const loading = ref(false);
 // 后端定义的前端键/类型 schema
-const schema = ref<Array<{ key: number; title: string; field_type: string }>>(
+const schema = ref<Array<{ key: number; title: string; field_type: string; save_as_array: boolean; quote_strings: boolean }>>(
     [],
 );
 // 表单数据

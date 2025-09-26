@@ -84,7 +84,13 @@
     "saveFailed": "儲存失敗: {{error}}",
     "loadFailed": "載入失敗: {{error}}",
     "fillRequired": "請填寫鍵和類型",
-    "fillRequiredEdit": "請填寫鍵和類型"
+    "fillRequiredEdit": "請填寫鍵和類型",
+    "saveAsArray": "儲存為陣列",
+    "quoteStrings": "引用字串",
+    "createFrontmatter": "創建 Frontmatter",
+    "noSchemaWarning": "未定義 frontmatter 欄位。請先在設定中設定 frontmatter 格式。",
+    "created": "Frontmatter 創建成功",
+    "createFailed": "創建 frontmatter 失敗"
   },
   "about": {
     "title": "關於 Rsoul",

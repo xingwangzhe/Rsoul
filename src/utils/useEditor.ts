@@ -7,13 +7,18 @@ import { listen } from "@tauri-apps/api/event";
 import { invoke } from "@tauri-apps/api/core";
 import ZH_TW from "@vavt/cm-extension/dist/locale/zh-TW";
 import { handleSave } from "../utils/editorUtils";
+import { loadFrontmatterSchema, initializeFormData } from "../utils/frontmatterUtils";
 
+// Configure md-editor-v3 to only load essential languages for better performance
 config({
   editorConfig: {
     languageUserDefined: {
       "zh-TW": ZH_TW,
     },
   },
+  // Disable loading all language data to reduce bundle size
+  // Only load languages that are actually needed
+  codeMirrorExtensions: () => [],
 });
 
 interface EditorProps {
@@ -56,7 +61,7 @@ export function useEditor(props: EditorProps) {
     loadTheme();
   });
 
-  const toolbars = [
+  const toolbars = computed(() => [
     0,
     "bold",
     "underline",
@@ -76,8 +81,6 @@ export function useEditor(props: EditorProps) {
     "link",
     "image",
     "table",
-    "mermaid",
-    "katex",
     "-",
     "revoke",
     "next",
@@ -88,13 +91,37 @@ export function useEditor(props: EditorProps) {
     "preview",
     "previewOnly",
     "catalog",
-  ];
+  ]);
 
   const text = ref("Hello Editor!");
   const frontmatter = ref<Record<string, any>>({});
 
+  // 检查是否有frontmatter
+  const hasFrontmatter = computed(() => {
+    return frontmatter.value && Object.keys(frontmatter.value).length > 0;
+  });
+
   const updateFrontmatter = (newFrontmatter: Record<string, any>) => {
     frontmatter.value = newFrontmatter;
+  };
+
+  // 创建frontmatter
+  const createFrontmatter = async () => {
+    try {
+      const schema = await loadFrontmatterSchema();
+      if (schema.length === 0) {
+        message.warning(t("frontmatter.noSchemaWarning"));
+        return;
+      }
+
+      const emptyFrontmatter = await initializeFormData(schema, {});
+      frontmatter.value = emptyFrontmatter;
+
+      message.success(t("frontmatter.created"));
+    } catch (error) {
+      console.error("创建frontmatter失败:", error);
+      message.error(t("frontmatter.createFailed"));
+    }
   };
 
   watch(
@@ -145,7 +172,9 @@ export function useEditor(props: EditorProps) {
     toolbars,
     text,
     frontmatter,
+    hasFrontmatter,
     updateFrontmatter,
+    createFrontmatter,
     onSave,
   };
 }

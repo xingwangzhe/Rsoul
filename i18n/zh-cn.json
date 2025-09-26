@@ -87,7 +87,11 @@
     "fillRequired": "请填写键和类型",
     "fillRequiredEdit": "请填写键和类型",
     "saveAsArray": "保存为数组",
-    "quoteStrings": "引用字符串"
+    "quoteStrings": "引用字符串",
+    "createFrontmatter": "创建 Frontmatter",
+    "noSchemaWarning": "未定义 frontmatter 字段。请先在设置中设置 frontmatter 格式。",
+    "created": "Frontmatter 创建成功",
+    "createFailed": "创建 frontmatter 失败"
   },
   "about": {
     "title": "关于 Rsoul",

@@ -90,7 +90,11 @@
     "fillRequired": "Please fill in key and type",
     "fillRequiredEdit": "Please fill in key and type",
     "saveAsArray": "Save as Array",
-    "quoteStrings": "Quote Strings"
+    "quoteStrings": "Quote Strings",
+    "createFrontmatter": "Create Frontmatter",
+    "noSchemaWarning": "No frontmatter fields defined. Please set up frontmatter format in Settings first.",
+    "created": "Frontmatter created successfully",
+    "createFailed": "Failed to create frontmatter"
   },
   "about": {
     "title": "About Rsoul",

@@ -13,12 +13,20 @@
                 :currentFrontmatter="frontmatter"
                 @updateFrontmatter="updateFrontmatter"
             />
+            <NormalToolbar
+                v-if="!hasFrontmatter"
+                title="Create Frontmatter"
+                @onClick="createFrontmatter"
+            >
+                <span>+</span>
+                Create Frontmatter
+            </NormalToolbar>
         </template>
     </MdEditor>
 </template>
 
 <script setup lang="ts">
-import { MdEditor } from "md-editor-v3";
+import { MdEditor, NormalToolbar } from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
 import { useEditor } from "../utils/useEditor";
 import FrontmatterEditor from "./FrontmatterEditor.vue";
@@ -34,7 +42,9 @@ const {
     toolbars,
     text,
     frontmatter,
+    hasFrontmatter,
     updateFrontmatter,
+    createFrontmatter,
     onSave,
 } = useEditor(props);
 </script>

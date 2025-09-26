@@ -6,10 +6,20 @@
             style="flex-direction: row"
         >
             <div id="left-dir">
-                <FileTree @file-selected="handleFileSelected" />
+                <Suspense>
+                    <FileTree @file-selected="handleFileSelected" />
+                    <template #fallback>
+                        <n-spin size="large" />
+                    </template>
+                </Suspense>
             </div>
             <div id="right-editor">
-                <Editor :content="selectedContent" :path="selectedPath" />
+                <Suspense>
+                    <Editor :content="selectedContent" :path="selectedPath" />
+                    <template #fallback>
+                        <n-spin size="large" />
+                    </template>
+                </Suspense>
             </div>
         </n-flex>
         <n-button
@@ -24,16 +34,22 @@
 </template>
 
 <script setup>
-import { defineAsyncComponent } from "vue";
-import { NMessageProvider, NButton, useMessage } from "naive-ui";
+import { defineAsyncComponent, Suspense } from "vue";
+import { NMessageProvider, NButton, NFlex, NSpin, useMessage } from "naive-ui";
 import { invoke } from "@tauri-apps/api/core";
 import { getStoredPath } from "../utils/fileTreeUtils";
 import { useFileSelection } from "../utils/useFileSelection";
 
-const FileTree = defineAsyncComponent(
-    () => import("../components/FileTree.vue"),
+const FileTree = defineAsyncComponent(() =>
+  import("../components/FileTree.vue")
 );
-const Editor = defineAsyncComponent(() => import("../components/Editor.vue"));
+const Editor = defineAsyncComponent(() =>
+  import("../components/Editor.vue")
+);
+
+// Preload Editor component as it's likely to be used immediately
+const preloadEditor = () => import("../components/Editor.vue");
+preloadEditor();
 
 const { selectedContent, selectedPath, handleFileSelected } =
     useFileSelection();
