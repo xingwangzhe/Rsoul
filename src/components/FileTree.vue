@@ -52,6 +52,7 @@ import {
     TrashOutline,
     CreateOutline,
     DocumentOutline,
+    FolderOutline,
 } from "@vicons/ionicons5";
 import { updatePrefixWithExpanded, NaiveNode } from "../utils/fileTreeUtils";
 import { useFileTree } from "../utils/useFileTree";
@@ -96,6 +97,14 @@ const contextMenuOptions = computed(() => {
                 label: t("contextMenu.newFolder"),
                 key: "newFolder",
                 icon: () => h(NIcon, null, { default: () => h(AddOutline) }),
+            },
+            {
+                type: "divider",
+            },
+            {
+                label: t("contextMenu.setAsWorkingDirectory"),
+                key: "setAsWorkingDirectory",
+                icon: () => h(NIcon, null, { default: () => h(FolderOutline) }),
             },
             {
                 type: "divider",
@@ -147,6 +156,9 @@ const handleContextMenuSelect = async (key: string) => {
                 break;
             case "newFolder":
                 await createNewFolder();
+                break;
+            case "setAsWorkingDirectory":
+                await setAsWorkingDirectory();
                 break;
             case "rename":
                 await renameItem();
@@ -231,6 +243,25 @@ const renameItem = async () => {
     } catch (error) {
         console.error("Rename failed:", error);
         message.error(t("contextMenu.renameFailed") + ": " + String(error));
+    }
+};
+
+// 设为工作目录
+const setAsWorkingDirectory = async () => {
+    if (!contextMenuNode.value || !contextMenuNode.value.isDir) return;
+
+    try {
+        await invoke("set_working_directory", {
+            request: { path: contextMenuNode.value.key },
+        });
+        message.success(t("contextMenu.setWorkingDirectorySuccess"));
+        // 刷新文件树显示新的工作目录
+        await getFileTree();
+    } catch (error) {
+        console.error("Set working directory failed:", error);
+        message.error(
+            t("contextMenu.setWorkingDirectoryFailed") + ": " + String(error),
+        );
     }
 };
 

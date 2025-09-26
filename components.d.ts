@@ -14,6 +14,8 @@ declare module 'vue' {
     NDataTable: typeof import('naive-ui')['NDataTable']
     NFlex: typeof import('naive-ui')['NFlex']
     NGlobalStyle: typeof import('naive-ui')['NGlobalStyle']
+    NInput: typeof import('naive-ui')['NInput']
+    NSpace: typeof import('naive-ui')['NSpace']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SetFrontmatter: typeof import('./src/components/SetFrontmatter.vue')['default']

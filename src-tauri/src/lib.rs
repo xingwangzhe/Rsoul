@@ -1,7 +1,9 @@
 mod commands;
 use commands::file_operations::{create_file, create_folder, delete_item, rename_item};
 use commands::get_file_content::get_file_content;
-use commands::get_file_tree::{get_file_tree, get_file_tree_from_path, get_stored_path};
+use commands::get_file_tree::{
+    get_file_tree, get_file_tree_from_path, get_stored_path, set_working_directory,
+};
 use commands::lang::{get_lang, set_lang};
 use commands::open_terminal::open_terminal;
 use commands::save_frontmatter::{
@@ -25,6 +27,7 @@ pub fn run() {
             get_file_tree,
             get_file_tree_from_path,
             get_stored_path,
+            set_working_directory,
             get_file_content,
             save_markdown,
             save_markdown_with_frontmatter,
@@ -42,7 +45,7 @@ pub fn run() {
             create_file,
             create_folder,
             rename_item,
-            delete_item
+            delete_item,
         ])
         .setup(|app| {
             let menu = MenuBuilder::new(app)

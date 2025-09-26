@@ -1,3 +1,4 @@
+use serde::Deserialize;
 use serde::Serialize;
 use std::fs;
 use std::io;
@@ -172,4 +173,35 @@ pub fn get_stored_path(app: AppHandle) -> Result<Option<String>, String> {
         .get("selectedPath")
         .and_then(|v| v.as_str().map(|s| s.to_string()));
     Ok(path)
+}
+
+#[derive(Debug, Deserialize)]
+pub struct SetWorkingDirectoryRequest {
+    pub path: String,
+}
+
+/// Tauri 命令：设置新的工作目录并更新存储。
+#[tauri::command]
+pub fn set_working_directory(
+    app: AppHandle,
+    request: SetWorkingDirectoryRequest,
+) -> Result<(), String> {
+    let path = PathBuf::from(&request.path);
+
+    // 检查路径是否存在且为目录
+    if !path.exists() {
+        return Err(format!("路径不存在: {}", path.display()));
+    }
+
+    if !path.is_dir() {
+        return Err(format!("路径不是目录: {}", path.display()));
+    }
+
+    // 保存到存储
+    let store = app
+        .store(".settings.dat")
+        .map_err(|e| format!("无法访问存储: {}", e))?;
+    store.set("selectedPath", request.path);
+
+    Ok(())
 }

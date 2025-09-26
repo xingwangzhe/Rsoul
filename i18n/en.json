@@ -8,6 +8,9 @@
     "newFolder": "New Folder",
     "rename": "Rename",
     "delete": "Delete",
+    "setAsWorkingDirectory": "Set as Working Directory",
+    "setWorkingDirectorySuccess": "Working directory set successfully",
+    "setWorkingDirectoryFailed": "Set working directory failed",
 
     "enterFileName": "Enter file name:",
     "enterFolderName": "Enter folder name:",

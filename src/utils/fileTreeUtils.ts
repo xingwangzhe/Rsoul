@@ -112,6 +112,8 @@ export async function loadFileTree(path: string): Promise<{
   }
 }
 
+
+
 /**
  * 从后端拉取文件树（调用 Rust: get_file_tree）
  */
@@ -121,30 +123,28 @@ export async function getFileTree(): Promise<{
   selectedPath: string | null;
 }> {
   try {
-    const res = await invoke<BackendNode>("get_file_tree");
-    if (!res) {
+    // 先获取存储的路径
+    const storedPath = await getStoredPath();
+    if (!storedPath) {
       return {
         treeData: [],
-        error: "后端返回空结果",
+        error: "没有存储的路径",
         selectedPath: null,
       };
     }
 
-    // backend may or may not return a stored path; prefer backend path but fall back to stored path
-    let selectedPath = (res as any).path || null;
-    if (!selectedPath) {
-      try {
-        const stored = await getStoredPath();
-        if (stored) {
-          selectedPath = stored;
-        }
-      } catch (err) {
-        console.warn("Failed to get stored path fallback:", err);
-      }
+    // 使用存储的路径调用 get_file_tree_from_path
+    const res = await invoke<BackendNode>("get_file_tree_from_path", { path: storedPath });
+    if (!res) {
+      return {
+        treeData: [],
+        error: "后端返回空结果",
+        selectedPath: storedPath,
+      };
     }
 
     const treeData = [mapNode(res as BackendNode)];
-    return { treeData, error: null, selectedPath };
+    return { treeData, error: null, selectedPath: storedPath };
   } catch (e) {
     console.error("调用错误", e);
     const error = e instanceof Error ? e.message : String(e);
