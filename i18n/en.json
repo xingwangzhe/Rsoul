@@ -85,7 +85,9 @@
     "saveFailed": "Save failed: {{error}}",
     "loadFailed": "Load failed: {{error}}",
     "fillRequired": "Please fill in key and type",
-    "fillRequiredEdit": "Please fill in key and type"
+    "fillRequiredEdit": "Please fill in key and type",
+    "saveAsArray": "Save as Array",
+    "quoteStrings": "Quote Strings"
   },
   "about": {
     "title": "About Rsoul",

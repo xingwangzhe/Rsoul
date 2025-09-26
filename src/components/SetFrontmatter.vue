@@ -18,6 +18,7 @@
                 :placeholder="$t('frontmatter.typePlaceholder')"
             />
         </n-form-item>
+
         <n-button @click="addField" type="primary">{{
             $t("frontmatter.addButton")
         }}</n-button>
@@ -44,6 +45,18 @@
                     :placeholder="$t('frontmatter.typePlaceholder')"
                 />
             </n-form-item>
+            <n-form-item
+                :label="$t('frontmatter.saveAsArray')"
+                path="save_as_array"
+            >
+                <n-switch v-model:value="editFormData.save_as_array" />
+            </n-form-item>
+            <n-form-item
+                :label="$t('frontmatter.quoteStrings')"
+                path="quote_strings"
+            >
+                <n-switch v-model:value="editFormData.quote_strings" />
+            </n-form-item>
         </n-form>
         <template #action>
             <n-button @click="saveEdit">{{
@@ -65,6 +78,7 @@ import {
     NSelect,
     NButton,
     NModal,
+    NSwitch,
 } from "naive-ui";
 import { useI18n } from "vue-i18n";
 import {
@@ -79,6 +93,8 @@ interface RowData {
     key: number;
     title: string;
     type: string;
+    save_as_array: boolean;
+    quote_strings: boolean;
 }
 
 const message = useMessage();
@@ -93,6 +109,8 @@ const editingIndex = ref(-1);
 const editFormData = ref({
     key: "",
     type: "",
+    save_as_array: false,
+    quote_strings: false,
 });
 
 const typeOptions = [
@@ -150,6 +168,8 @@ const saveData = async () => {
             key: item.key,
             title: item.title,
             field_type: item.type,
+            save_as_array: item.save_as_array,
+            quote_strings: item.quote_strings,
         }));
         await saveFrontmatterFields(fields);
         // 保存字段配置后重新收集建议
@@ -168,6 +188,8 @@ const loadData = async () => {
             key: item.key,
             title: item.title,
             type: item.field_type,
+            save_as_array: item.save_as_array || false,
+            quote_strings: item.quote_strings || false,
         }));
     } catch (e) {
         message.error(t("frontmatter.loadFailed", { error: e }), {
@@ -190,6 +212,8 @@ const addField = async () => {
         key: newKey,
         title: formData.value.key,
         type: formData.value.type,
+        save_as_array: false,
+        quote_strings: false,
     });
     formData.value.key = "";
     formData.value.type = "";
@@ -201,7 +225,12 @@ const editField = (index: number) => {
     const row = data.value.find((item) => item.key === index);
     if (row) {
         editingIndex.value = index;
-        editFormData.value = { key: row.title, type: row.type };
+        editFormData.value = {
+            key: row.title,
+            type: row.type,
+            save_as_array: row.save_as_array,
+            quote_strings: row.quote_strings,
+        };
         showEditModal.value = true;
     }
 };
@@ -217,6 +246,8 @@ const saveEdit = async () => {
     if (index !== -1) {
         data.value[index].title = editFormData.value.key;
         data.value[index].type = editFormData.value.type;
+        data.value[index].save_as_array = editFormData.value.save_as_array;
+        data.value[index].quote_strings = editFormData.value.quote_strings;
         message.success(t("frontmatter.editSuccess"), { closable: true });
         await saveData();
     }

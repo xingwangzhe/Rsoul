@@ -10,6 +10,8 @@ pub struct FrontmatterField {
     pub key: usize,
     pub title: String,
     pub field_type: String,
+    pub save_as_array: bool,
+    pub quote_strings: bool,
 }
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -231,6 +233,34 @@ pub fn initialize_form_data(
                     form_data.insert(field.title, serde_json::Value::Null);
                 }
             }
+            "string" => {
+                if let Some(v) = val {
+                    if v.is_array() && !v.as_array().unwrap().is_empty() {
+                        // If saved as array, take the first element
+                        let first = &v.as_array().unwrap()[0];
+                        if first.is_string() {
+                            let mut s = first.as_str().unwrap().to_string();
+                            if s.starts_with('"') && s.ends_with('"') {
+                                s = s[1..s.len() - 1].to_string();
+                            }
+                            form_data.insert(field.title, serde_json::Value::String(s));
+                        } else {
+                            form_data
+                                .insert(field.title, serde_json::Value::String("".to_string()));
+                        }
+                    } else if v.is_string() {
+                        let mut s = v.as_str().unwrap().to_string();
+                        if s.starts_with('"') && s.ends_with('"') {
+                            s = s[1..s.len() - 1].to_string();
+                        }
+                        form_data.insert(field.title, serde_json::Value::String(s));
+                    } else {
+                        form_data.insert(field.title, serde_json::Value::String("".to_string()));
+                    }
+                } else {
+                    form_data.insert(field.title, serde_json::Value::String("".to_string()));
+                }
+            }
             _ => {
                 let default_val = match field.field_type.as_str() {
                     "number" => serde_json::Value::Number(0.into()),
@@ -313,6 +343,24 @@ pub fn save_form_data_to_frontmatter(
                                 field.title,
                                 serde_json::Value::String(datetime_str.to_string()),
                             );
+                        }
+                    }
+                }
+            }
+            "string" => {
+                if let Some(v) = raw {
+                    if v.is_string() {
+                        let mut s = v.as_str().unwrap().to_string();
+                        if field.quote_strings {
+                            s = format!("\"{}\"", s);
+                        }
+                        if field.save_as_array {
+                            output.insert(
+                                field.title,
+                                serde_json::Value::Array(vec![serde_json::Value::String(s)]),
+                            );
+                        } else {
+                            output.insert(field.title, serde_json::Value::String(s));
                         }
                     }
                 }

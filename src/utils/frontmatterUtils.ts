@@ -6,18 +6,28 @@ import { invoke } from "@tauri-apps/api/core";
  * 加载frontmatter字段定义schema
  */
 export async function loadFrontmatterSchema(): Promise<
-  Array<{ key: number; title: string; field_type: string }>
+  Array<{
+    key: number;
+    title: string;
+    field_type: string;
+    save_as_array: boolean;
+    quote_strings: boolean;
+  }>
 > {
   const loaded = (await invoke("load_frontmatter")) as Array<{
     key: number;
     title: string;
     field_type?: string;
     type?: string;
+    save_as_array?: boolean;
+    quote_strings?: boolean;
   }>;
   return loaded.map((f) => ({
     key: f.key,
     title: f.title,
     field_type: f.field_type ?? f.type ?? "string",
+    save_as_array: f.save_as_array ?? false,
+    quote_strings: f.quote_strings ?? false,
   }));
 }
 
@@ -44,7 +54,13 @@ export async function collectFrontmatterSuggestions(): Promise<void> {
  * 保存frontmatter字段定义
  */
 export async function saveFrontmatterFields(
-  fields: Array<{ key: number; title: string; field_type: string }>,
+  fields: Array<{
+    key: number;
+    title: string;
+    field_type: string;
+    save_as_array: boolean;
+    quote_strings: boolean;
+  }>,
 ): Promise<void> {
   await invoke("save_frontmatter", { fields });
 }
@@ -53,7 +69,13 @@ export async function saveFrontmatterFields(
  * 初始化表单数据（由后端处理类型转换）
  */
 export async function initializeFormData(
-  schema: Array<{ key: number; title: string; field_type: string }>,
+  schema: Array<{
+    key: number;
+    title: string;
+    field_type: string;
+    save_as_array: boolean;
+    quote_strings: boolean;
+  }>,
   currentFrontmatter: Record<string, any> = {},
 ): Promise<Record<string, any>> {
   const result = await invoke("initialize_form_data", {
@@ -67,7 +89,13 @@ export async function initializeFormData(
  * 保存表单数据到frontmatter（由后端处理类型转换）
  */
 export async function saveFormDataToFrontmatter(
-  schema: Array<{ key: number; title: string; field_type: string }>,
+  schema: Array<{
+    key: number;
+    title: string;
+    field_type: string;
+    save_as_array: boolean;
+    quote_strings: boolean;
+  }>,
   formData: Record<string, any>,
 ): Promise<Record<string, any>> {
   const result = await invoke("save_form_data_to_frontmatter", {

@@ -82,7 +82,9 @@
     "saveFailed": "保存失败: {{error}}",
     "loadFailed": "加载失败: {{error}}",
     "fillRequired": "请填写键和类型",
-    "fillRequiredEdit": "请填写键和类型"
+    "fillRequiredEdit": "请填写键和类型",
+    "saveAsArray": "保存为数组",
+    "quoteStrings": "引用字符串"
   },
   "about": {
     "title": "关于 Rsoul",
